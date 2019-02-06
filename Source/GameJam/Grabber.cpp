@@ -4,6 +4,7 @@
 #include "DrawDebugHelpers.h"
 #include "CollisionQueryParams.h"
 
+
 #define OUT
 
 // Sets default values for this component's properties
@@ -48,6 +49,7 @@ void UGrabber::AllowInput() //find "InputComponent"
 	else
 	{
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		InputComponent->BindAction("Throw", IE_Pressed, this, &UGrabber::Throw);
 	}
 	
 }
@@ -85,6 +87,24 @@ void UGrabber::Grab()
 				}
 			}
 			
+		}
+	}
+}
+
+void UGrabber::Throw()
+{
+	auto HitResult = GetFirstObjectHit();
+	auto ComponentToGrab = HitResult.GetComponent();
+	auto Actor = HitResult.GetActor();
+
+	if (Actor)
+	{
+		if (Grabbed == 1)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Throwing Object"));
+			ComponentToGrab->AddForce(FVector(GetOwner()->GetActorForwardVector()) * Impulse * ComponentToGrab->GetMass(), NAME_None, 1);
+			PhysicsHandle->ReleaseComponent();
+			Grabbed = 0;
 		}
 	}
 }

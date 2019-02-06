@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -27,9 +28,13 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void FindPhysicsHandle();
+
 	void AllowInput();
 	void Grab();
+	void Throw();
+	
 	FHitResult GetFirstObjectHit();
+	
 	FVector GetLineTraceStart();
 	FVector GetLineTraceEnd();
 
@@ -40,6 +45,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float Reach = 100.f;
+
+	UPROPERTY(EditAnywhere)
+	int Impulse = 100000;
 
 	bool Grabbed = 0;
 	
