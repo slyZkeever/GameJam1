@@ -7,6 +7,11 @@
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/PrimitiveComponent.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+#include "CollisionQueryParams.h"
 #include "Grabber.generated.h"
 
 
@@ -50,5 +55,9 @@ private:
 	int Impulse = 100000;
 
 	bool Grabbed = 0;
+
+	ACharacter* MyCharacter = nullptr;
+
+	UCameraComponent* PlayerCam = nullptr;
 	
 };

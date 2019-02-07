@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Grabber.h"
-#include "DrawDebugHelpers.h"
-#include "CollisionQueryParams.h"
+
 
 
 #define OUT
@@ -26,6 +25,19 @@ void UGrabber::BeginPlay()
 	FindPhysicsHandle();
 	AllowInput();
 	
+	MyCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
+	if (!MyCharacter)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Character Not Found!"));
+	}
+	else
+	{
+		PlayerCam = MyCharacter->FindComponentByClass<UCameraComponent>();
+		if (!PlayerCam)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Camera Not Found!"));
+		}
+	}
 
 }
 
@@ -102,7 +114,7 @@ void UGrabber::Throw()
 		if (Grabbed == 1)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Throwing Object"));
-			ComponentToGrab->AddForce(FVector(GetOwner()->GetActorForwardVector()) * Impulse * ComponentToGrab->GetMass(), NAME_None, 1);
+			ComponentToGrab->AddForce( PlayerCam->GetForwardVector()* Impulse, NAME_None, 1);
 			PhysicsHandle->ReleaseComponent();
 			Grabbed = 0;
 		}
@@ -135,10 +147,13 @@ FHitResult UGrabber::GetFirstObjectHit()
 
 FVector UGrabber::GetLineTraceStart()
 {
+	
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+	//GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+	PlayerViewPointLocation = PlayerCam->GetComponentLocation();
+	PlayerViewPointRotation = PlayerCam->GetComponentRotation();
 
 	return PlayerViewPointLocation;
 }
@@ -148,7 +163,9 @@ FVector UGrabber::GetLineTraceEnd()
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+	//GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+	PlayerViewPointLocation = PlayerCam->GetComponentLocation();
+	PlayerViewPointRotation = PlayerCam->GetComponentRotation();
 
 	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
 }
