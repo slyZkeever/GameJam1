@@ -7,5 +7,5 @@ Build Version : 1.1 <br  />
 
 #Credits: <br  />
 Engine/3d Models : Epic Games <br  />
-Music : Rohan Majrikar(majrikarrohan333@gmail.com) <br  />
+Music : Rohan Majrikar <br  />
 Programming/Level design : Vikaramadity Thakur (Me) <br  />
