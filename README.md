@@ -1,6 +1,6 @@
 #Details
-Theme : Unfamiliarity 
-Task: Create a Tutorial. 
-Engine : Unreal Engine 4.19
-Build Version : 1.1
+Theme : Unfamiliarity <br  />
+Task: Create a Tutorial. <br  />
+Engine : Unreal Engine 4.19 <br  />
+Build Version : 1.1 <br  />
 
