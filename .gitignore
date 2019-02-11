@@ -76,6 +76,4 @@ DerivedDataCache/*
 # Removing actual build
 WindowsNoEditor/*
 
-# Not Tracking Pre-Jam versions
-GameFile v1.0.rar
 
