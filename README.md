@@ -4,7 +4,7 @@ Task: Create a Tutorial. <br  />
 Engine : Unreal Engine 4.19 <br  />
 Build Version : 1.0 <br  />
 <a href = "https://github.com/slyZkeever/GameJam1/raw/master/PostGameFile%20v1.0.rar"> Download game(Post Jam) </a><br  />
-<a href = ""> Download game(Pre Jam) </a> <br  /> <br  />
+<a href = "https://drive.google.com/open?id=13RW5kVC8D7soLKwvER6DJ_bNlBuloRUo"> Download game(Pre Jam) </a> <br  /> <br  />
 
 #Credits: <br  />
 Engine/3d Models : Epic Games <br  />
