@@ -49,10 +49,10 @@ private:
 	UInputComponent* InputComponent = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	float Reach = 100.f;
+	float Reach = 160.f;
 
 	UPROPERTY(EditAnywhere)
-	int Impulse = 100000;
+	int ForceApplied = 200000;
 
 	bool Grabbed = 0;
 

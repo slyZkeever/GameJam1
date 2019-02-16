@@ -113,8 +113,9 @@ void UGrabber::Throw()
 	{
 		if (Grabbed == 1)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Throwing Object"));
-			ComponentToGrab->AddForce( PlayerCam->GetForwardVector()* Impulse, NAME_None, 1);
+			float ForceMagnitude = ForceApplied / (ComponentToGrab->GetMass());
+			UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f"), ForceMagnitude);
+			ComponentToGrab->AddForce( (PlayerCam->GetForwardVector() * ForceMagnitude), NAME_None, 1);
 			PhysicsHandle->ReleaseComponent();
 			Grabbed = 0;
 		}
