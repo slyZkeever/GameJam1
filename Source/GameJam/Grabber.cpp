@@ -3,7 +3,6 @@
 #include "Grabber.h"
 
 
-
 #define OUT
 
 // Sets default values for this component's properties
@@ -68,9 +67,9 @@ void UGrabber::AllowInput() //find "InputComponent"
 
 void UGrabber::Grab()
 {
-	auto HitResult = GetFirstObjectHit();
-	auto ComponentToGrab = HitResult.GetComponent();
-	auto Actor = HitResult.GetActor();
+	HitResult = GetFirstObjectHit();
+	ComponentToGrab = HitResult.GetComponent();
+	Actor = HitResult.GetActor();
 
 	if (Actor)
 	{
@@ -87,15 +86,18 @@ void UGrabber::Grab()
 					ComponentToGrab->GetOwner()->GetActorLocation(), 
 					ComponentToGrab->GetOwner()->GetActorRotation()
 				);
+				if (!ComponentToGrab->IsSimulatingPhysics()) //for when the "Interactable" is attached to other one (chk BP).
+				{
+					//UE_LOG(LogTemp, Warning, TEXT("simulating?: %s"), *(ComponentToGrab->IsSimulatingPhysics().ToString())); //a prob
+					ComponentToGrab->SetSimulatePhysics(1);
+				}
 				Grabbed = 1;
 			}
 			else
 			{
 				if (Grabbed == 1)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Releasing object"));
-					PhysicsHandle->ReleaseComponent();
-					Grabbed = 0;
+					Drop();
 				}
 			}
 			
@@ -103,21 +105,23 @@ void UGrabber::Grab()
 	}
 }
 
+void UGrabber::Drop()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Releasing object"));
+	PhysicsHandle->ReleaseComponent();
+	Grabbed = 0;
+}
+
 void UGrabber::Throw()
 {
-	auto HitResult = GetFirstObjectHit();
-	auto ComponentToGrab = HitResult.GetComponent();
-	auto Actor = HitResult.GetActor();
-
-	if (Actor)
+	if (Grabbed == 1)
 	{
-		if (Grabbed == 1)
+		if (Actor)
 		{
 			float ForceMagnitude = ForceApplied / (ComponentToGrab->GetMass());
 			UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f"), ForceMagnitude);
 			ComponentToGrab->AddForce( (PlayerCam->GetForwardVector() * ForceMagnitude), NAME_None, 1);
-			PhysicsHandle->ReleaseComponent();
-			Grabbed = 0;
+			Drop();
 		}
 	}
 }
