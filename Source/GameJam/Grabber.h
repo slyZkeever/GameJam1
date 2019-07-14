@@ -28,6 +28,12 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
+		float Reach = 160.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
+		int ForceApplied = 200000;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -36,11 +42,11 @@ public:
 
 	void AllowInput();
 
-	UFUNCTION(BlueprintCallable, Category = "Functions")
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 	void Grab();
-	UFUNCTION(BlueprintCallable, Category = "Functions")
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 	void Drop();
-	UFUNCTION(BlueprintCallable, Category = "Functions")
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 	void Throw();
 	
 	FHitResult GetFirstObjectHit();
@@ -52,12 +58,6 @@ private:
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	UInputComponent* InputComponent = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
-	float Reach = 160.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
-	int ForceApplied = 200000;
 
 	bool Grabbed = 0;
 

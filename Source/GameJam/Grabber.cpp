@@ -89,7 +89,7 @@ void UGrabber::Grab()
 				);
 				if (!(ComponentToGrab->IsSimulatingPhysics()))
 				{
-					ComponentToGrab->SetSimulatePhysics(1);
+					ComponentToGrab->SetSimulatePhysics("true");
 				}
 				Grabbed = 1;
 			}
