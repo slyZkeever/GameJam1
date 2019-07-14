@@ -35,7 +35,12 @@ public:
 	void FindPhysicsHandle();
 
 	void AllowInput();
+
+	UFUNCTION(BlueprintCallable, Category = "Functions")
 	void Grab();
+	UFUNCTION(BlueprintCallable, Category = "Functions")
+	void Drop();
+	UFUNCTION(BlueprintCallable, Category = "Functions")
 	void Throw();
 	
 	FHitResult GetFirstObjectHit();
@@ -48,13 +53,17 @@ private:
 
 	UInputComponent* InputComponent = nullptr;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
 	float Reach = 160.f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
 	int ForceApplied = 200000;
 
 	bool Grabbed = 0;
+
+	FHitResult HitResult;
+	UPrimitiveComponent *ComponentToGrab = nullptr;
+	AActor *Actor = nullptr;
 
 	ACharacter* MyCharacter = nullptr;
 
