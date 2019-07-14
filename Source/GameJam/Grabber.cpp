@@ -68,9 +68,9 @@ void UGrabber::AllowInput() //find "InputComponent"
 
 void UGrabber::Grab()
 {
-	auto HitResult = GetFirstObjectHit();
-	auto ComponentToGrab = HitResult.GetComponent();
-	auto Actor = HitResult.GetActor();
+	HitResult = GetFirstObjectHit();
+	ComponentToGrab = HitResult.GetComponent();
+	Actor = HitResult.GetActor();
 
 	if (Grabbed == 0)
 	{
@@ -87,9 +87,9 @@ void UGrabber::Grab()
 					ComponentToGrab->GetOwner()->GetActorLocation(), 
 					ComponentToGrab->GetOwner()->GetActorRotation()
 				);
-				if (!ComponentToGrab->IsSimulatingPhysics())
+				if (!(ComponentToGrab->IsSimulatingPhysics()))
 				{
-					ComponentToGrab->SetSimulatingPhysics(1);
+					ComponentToGrab->SetSimulatePhysics(1);
 				}
 				Grabbed = 1;
 			}
@@ -114,16 +114,12 @@ void UGrabber::Drop()
 
 void UGrabber::Throw()
 {
-	auto HitResult = GetFirstObjectHit();
-	auto ComponentToGrab = HitResult.GetComponent();
-	auto Actor = HitResult.GetActor();
-
 	if (Grabbed == 1)
 	{
 		if (Actor)
 		{
 			float ForceMagnitude = ForceApplied / (ComponentToGrab->GetMass());
-			UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f"), ForceMagnitude);
+			UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f with Force: %f"), ComponentToGrab->GetMass(), ForceMagnitude);
 			ComponentToGrab->AddForce( (PlayerCam->GetForwardVector() * ForceMagnitude), NAME_None, 1);
 			Drop();
 		}
