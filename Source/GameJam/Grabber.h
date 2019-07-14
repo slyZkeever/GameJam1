@@ -35,12 +35,7 @@ public:
 	void FindPhysicsHandle();
 
 	void AllowInput();
-	
-	UFUNCTION(BlueprintCallable, Category = "Function")
 	void Grab();
-	UFUNCTION(BlueprintCallable, Category = "Function")
-	void Drop();
-	UFUNCTION(BlueprintCallable, Category = "Function")
 	void Throw();
 	
 	FHitResult GetFirstObjectHit();
@@ -53,22 +48,16 @@ private:
 
 	UInputComponent* InputComponent = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variable")
+	UPROPERTY(EditAnywhere)
 	float Reach = 160.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variable")
-	int ForceApplied = 200000; 
+	UPROPERTY(EditAnywhere)
+	int ForceApplied = 200000;
 
 	bool Grabbed = 0;
 
 	ACharacter* MyCharacter = nullptr;
 
 	UCameraComponent* PlayerCam = nullptr;
-
-	FHitResult HitResult;
-
-	UPrimitiveComponent *ComponentToGrab = nullptr;
-	
-	AActor *Actor = nullptr;
 	
 };
