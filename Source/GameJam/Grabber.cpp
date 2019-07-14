@@ -57,20 +57,14 @@ void UGrabber::AllowInput() //find "InputComponent"
 	if (!InputComponent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("InputComponent Not Found!"));
-	}
-	else
-	{
-		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
-		InputComponent->BindAction("Throw", IE_Pressed, this, &UGrabber::Throw);
-	}
-	
+	}	
 }
 
 void UGrabber::Grab()
 {
-	HitResult = GetFirstObjectHit();
-	ComponentToGrab = HitResult.GetComponent();
-	Actor = HitResult.GetActor();
+	auto HitResult = GetFirstObjectHit();
+	auto ComponentToGrab = HitResult.GetComponent();
+	auto Actor = HitResult.GetActor();
 
 	if (Grabbed == 0)
 	{
@@ -79,6 +73,11 @@ void UGrabber::Grab()
 		{
 			if (Actor)
 			{
+				if (!(ComponentToGrab->IsSimulatingPhysics()))
+				{
+					ComponentToGrab->SetSimulatePhysics("true");
+				}
+
 				UE_LOG(LogTemp, Warning, TEXT("Grabbing object"));
 				PhysicsHandle->GrabComponentAtLocationWithRotation
 				(
@@ -87,17 +86,16 @@ void UGrabber::Grab()
 					ComponentToGrab->GetOwner()->GetActorLocation(), 
 					ComponentToGrab->GetOwner()->GetActorRotation()
 				);
-				if (!(ComponentToGrab->IsSimulatingPhysics()))
-				{
-					ComponentToGrab->SetSimulatePhysics("true");
-				}
+				
 				Grabbed = 1;
 			}
 			else
 			{
 				if (Grabbed == 1)
 				{
-					Drop();
+					UE_LOG(LogTemp, Warning, TEXT("Releasing object"));
+					PhysicsHandle->ReleaseComponent();
+					Grabbed = 0;
 				}
 			}
 			
@@ -114,9 +112,13 @@ void UGrabber::Drop()
 
 void UGrabber::Throw()
 {
-	if (Grabbed == 1)
+	auto HitResult = GetFirstObjectHit();
+	auto ComponentToGrab = HitResult.GetComponent();
+	auto Actor = HitResult.GetActor();
+
+	if (Actor)
 	{
-		if (Actor)
+		if (Grabbed == 1)
 		{
 			float ForceMagnitude = ForceApplied / (ComponentToGrab->GetMass());
 			UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f with Force: %f"), ComponentToGrab->GetMass(), ForceMagnitude);
@@ -173,6 +175,16 @@ FVector UGrabber::GetLineTraceEnd()
 	PlayerViewPointRotation = PlayerCam->GetComponentRotation();
 
 	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+}
+
+void UGrabber::SetGrabbed(bool Value)
+{
+	Grabbed = Value;
+}
+
+bool UGrabber::GetGrabbed()
+{
+	return Grabbed;
 }
 
 // Called every frame

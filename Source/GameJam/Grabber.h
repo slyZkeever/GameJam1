@@ -41,18 +41,22 @@ public:
 	void FindPhysicsHandle();
 
 	void AllowInput();
-
-	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	void Grab();
-	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	void Drop();
-	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	void Throw();
 	
 	FHitResult GetFirstObjectHit();
 	
 	FVector GetLineTraceStart();
 	FVector GetLineTraceEnd();
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void Grab();
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void Drop();
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void Throw();
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void SetGrabbed(bool Value);
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		bool GetGrabbed();
 
 private: 
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
@@ -61,9 +65,9 @@ private:
 
 	bool Grabbed = 0;
 
-	FHitResult HitResult;
+	/*FHitResult HitResult;
 	UPrimitiveComponent *ComponentToGrab = nullptr;
-	AActor *Actor = nullptr;
+	AActor *Actor = nullptr;*/
 
 	ACharacter* MyCharacter = nullptr;
 
