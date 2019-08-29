@@ -122,7 +122,7 @@ void UGrabber::Throw()
 		{
 			float ForceMagnitude = ForceApplied / (ComponentToGrab->GetMass());
 			UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f with Force: %f"), ComponentToGrab->GetMass(), ForceMagnitude);
-			ComponentToGrab->AddForce( (PlayerCam->GetForwardVector() * ForceMagnitude), NAME_None, 1);
+			ComponentToGrab->AddForce( (PlayerCam->GetForwardVector() * ForceMagnitude), NAME_None, 0);
 			Drop();
 		}
 	}
