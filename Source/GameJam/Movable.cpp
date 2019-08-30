@@ -164,13 +164,13 @@ void UMovable::PerformAnimation(UStaticMeshComponent* Platform)
 		if (bIncrease && (CurrentTime <= MaxTime))
 		{
 			CurrentTime += ASecond;
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Rate*DirectionToMove) ), true);
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Rate*DirectionToMove) ));
 		}
 
 		if (!bIncrease && (CurrentTime >= 0))
 		{
 			CurrentTime -= ASecond;
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Rate*DirectionToMove) ), true);
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Rate*DirectionToMove) ));
 		}
 	}
 	
