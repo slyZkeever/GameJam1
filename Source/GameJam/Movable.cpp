@@ -32,6 +32,7 @@ void UMovable::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	// ...
 }
 
+//-------------------- getters and setters
 void UMovable::setbPlatformAtA(bool Val)
 {
 	bPlatformAtA = Val;
@@ -94,24 +95,27 @@ int UMovable::getDirectionToMove()
 {
 	return DirectionToMove;
 }
+//-----------------------
 
-
-int UMovable::CalculateTime(UStaticMeshComponent* Object1, UStaticMeshComponent* Object2)
+void UMovable::CalculateTime(UStaticMeshComponent* Object1, UStaticMeshComponent* Object2)
 {
-	return UKismetMathLibrary::FTrunc
-	(Object1->GetRelativeTransform().GetLocation().Z - Object2->GetRelativeTransform().GetLocation().Z) / Rate;
+	MaxTime = UKismetMathLibrary::FTrunc
+	(
+		(Object1->GetRelativeTransform().GetLocation().Z) - (Object2->GetRelativeTransform().GetLocation().Z)
+	) / Rate;
 
 }
 
 void UMovable::Switcher()
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s"), DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")));
-
+	
 	if (bPlatformAtA && bInsideA)
 	{
 		DirectionToMove = 1;
 		bIncrease = true;
-		UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s, bNearBtnA = %s"), DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")), (bNearBtnA ? TEXT("true") : TEXT("false")));
+		
+		UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s"), 
+			DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")));
 	}
 
 	else
@@ -120,7 +124,9 @@ void UMovable::Switcher()
 		{
 			DirectionToMove = -1;
 			bIncrease = false;
-			UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s, bNearBtnA = %s"), DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")), (bNearBtnA ? TEXT("true") : TEXT("false")));
+			
+			UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s"), 
+				DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")) );
 		}
 
 		else
@@ -129,7 +135,9 @@ void UMovable::Switcher()
 			{
 				DirectionToMove = 1;
 				bIncrease = true;
-				UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s, bNearBtnA = %s"), DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")), (bNearBtnA ? TEXT("true") : TEXT("false")));
+				
+				UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s"), 
+					DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")) );
 			}
 
 			else
@@ -138,10 +146,32 @@ void UMovable::Switcher()
 				{
 					DirectionToMove = -1;
 					bIncrease = false;
-					UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s, bNearBtnA = %s"), DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")), (bNearBtnA ? TEXT("true") : TEXT("false")));
+					
+					UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s "), 
+						DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")) );
 				}
 			}
 		}
 	}
 }
 
+void UMovable::PerformAnimation(UStaticMeshComponent* Platform)
+{
+	if (bNearBtnA || bNearBtnB)
+	{
+		FVector NewLocation = Platform->GetRelativeTransform().GetLocation();
+		
+		if (bIncrease && (CurrentTime <= MaxTime))
+		{
+			CurrentTime += ASecond;
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Rate*DirectionToMove) ));
+		}
+
+		if (!bIncrease && (CurrentTime >= 0))
+		{
+			CurrentTime -= ASecond;
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Rate*DirectionToMove) ));
+		}
+	}
+	
+}
