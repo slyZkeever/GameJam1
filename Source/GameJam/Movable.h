@@ -39,14 +39,13 @@ protected:
 	bool bNearBtnA = false;
 	bool bNearBtnB = false;
 
+	int32 MaxTime = 0;
+	int32 CurrentTime = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
+	int32 ASecond = 1;
 
-	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		int CalculateTime(UStaticMeshComponent* Object1, UStaticMeshComponent* Object2);
-
-	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		void Switcher();
-
+	//-------------------------------------
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
 		void setbPlatformAtA(bool Val);
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
@@ -77,7 +76,17 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
 		int getDirectionToMove();
+	//---------------------------------------------------
 
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void CalculateTime(UStaticMeshComponent* Object1, UStaticMeshComponent* Object2);
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void Switcher();
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+	    void PerformAnimation(UStaticMeshComponent* Platform);
 
 public:
 	// Called every frame
