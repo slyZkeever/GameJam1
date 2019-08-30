@@ -34,6 +34,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
 		int ForceApplied = 200000;
 
+	UPrimitiveComponent* getComponentToGrab();
+
+	void setComponentToGrab(UPrimitiveComponent* val);
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -59,18 +63,19 @@ public:
 		bool GetGrabbed();
 
 private: 
+	
+	bool Grabbed = 0;
+
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	UInputComponent* InputComponent = nullptr;
 
-	bool Grabbed = 0;
-
-	/*FHitResult HitResult;
-	UPrimitiveComponent *ComponentToGrab = nullptr;
-	AActor *Actor = nullptr;*/
-
+	UPrimitiveComponent* ComponentToGrab = nullptr;
+	
 	ACharacter* MyCharacter = nullptr;
 
 	UCameraComponent* PlayerCam = nullptr;
+
+
 	
 };

@@ -65,7 +65,7 @@ void UGrabber::Grab()
 	auto HitResult = GetFirstObjectHit();
 	auto ComponentToGrab = HitResult.GetComponent();
 	auto Actor = HitResult.GetActor();
-
+	
 	if (Grabbed == 0)
 	{
 		if (!PhysicsHandle) { return; }
@@ -185,6 +185,16 @@ void UGrabber::SetGrabbed(bool Value)
 bool UGrabber::GetGrabbed()
 {
 	return Grabbed;
+}
+
+UPrimitiveComponent * UGrabber::getComponentToGrab()
+{
+	return ComponentToGrab;
+}
+
+void UGrabber::setComponentToGrab(UPrimitiveComponent * val)
+{
+	ComponentToGrab = val;
 }
 
 // Called every frame
