@@ -97,13 +97,15 @@ int UMovable::getDirectionToMove()
 }
 //-----------------------
 
-void UMovable::CalculateTime(UStaticMeshComponent* Object1, UStaticMeshComponent* Object2)
+void UMovable::CalculateTime(UBoxComponent* ObjectA, UBoxComponent* ObjectB)
 {
-	MaxTime = UKismetMathLibrary::FTrunc
+	MaxTime = UKismetMathLibrary::Abs_Int( UKismetMathLibrary::FTrunc
 	(
-		(Object1->GetRelativeTransform().GetLocation().Z) - (Object2->GetRelativeTransform().GetLocation().Z)
-	) / Rate;
+		(ObjectB->GetComponentLocation().Z) - (ObjectA->GetComponentLocation().Z)
+	   ) / Rate );
 
+	
+	UE_LOG(LogTemp, Warning, TEXT("MaxTime = %d"), MaxTime);
 }
 
 void UMovable::Switcher()

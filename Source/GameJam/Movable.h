@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Math/Vector.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/BoxComponent.h"
 
 #include "Movable.generated.h"
 
@@ -80,7 +81,7 @@ protected:
 
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		void CalculateTime(UStaticMeshComponent* Object1, UStaticMeshComponent* Object2);
+		void CalculateTime(UBoxComponent* ObjectA, UBoxComponent* ObjectB);
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 		void Switcher();
