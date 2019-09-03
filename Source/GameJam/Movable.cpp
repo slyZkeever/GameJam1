@@ -47,6 +47,7 @@ bool UMovable::getbPlatformAtA()
 void UMovable::setbInsideA(bool Val)
 {
 	bInsideA = Val;
+	UE_LOG(LogTemp, Warning, TEXT("bInsideA = %s"), (bInsideA ? TEXT("true") : TEXT("false")));
 }
 
 bool UMovable::getbInsideA()
@@ -57,6 +58,7 @@ bool UMovable::getbInsideA()
 void UMovable::setbInsideB(bool Val)
 {
 	bInsideB = Val;
+	UE_LOG(LogTemp, Warning, TEXT("bInsideB = %s"), (bInsideB ? TEXT("true") : TEXT("false")));
 }
 
 bool UMovable::getbInsideB()
@@ -97,15 +99,13 @@ int UMovable::getDirectionToMove()
 }
 //-----------------------
 
-void UMovable::CalculateTime(UBoxComponent* ObjectA, UBoxComponent* ObjectB)
+void UMovable::CalculateTime(UStaticMeshComponent* ObjectA, UStaticMeshComponent* ObjectB)
 {
 	MaxTime = UKismetMathLibrary::Abs_Int( UKismetMathLibrary::FTrunc
 	(
-		(ObjectB->GetComponentLocation().Z) - (ObjectA->GetComponentLocation().Z)
+		(ObjectB->GetRelativeTransform().GetLocation().Z) - (ObjectA->GetRelativeTransform().GetLocation().Z)
 	   ) / Rate );
 
-	
-	UE_LOG(LogTemp, Warning, TEXT("MaxTime = %d"), MaxTime);
 }
 
 void UMovable::Switcher()
@@ -159,6 +159,7 @@ void UMovable::Switcher()
 
 void UMovable::PerformAnimation(UStaticMeshComponent* Platform)
 {
+	//UE_LOG(LogTemp, Warning, TEXT("bNearBtnA = %s, bNearBtnB = %s"), (bNearBtnA ? TEXT("true") : TEXT("false")), (bNearBtnB ? TEXT("true") : TEXT("false")) );
 	if (bNearBtnA || bNearBtnB)
 	{
 		FVector NewLocation = Platform->GetRelativeTransform().GetLocation();

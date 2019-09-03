@@ -81,7 +81,7 @@ protected:
 
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		void CalculateTime(UBoxComponent* ObjectA, UBoxComponent* ObjectB);
+		void CalculateTime(UStaticMeshComponent* ObjectA, UStaticMeshComponent* ObjectB);
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 		void Switcher();
