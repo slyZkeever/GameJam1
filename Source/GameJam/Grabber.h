@@ -34,9 +34,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
 		int ForceApplied = 200000;
 
-	UPrimitiveComponent* getComponentToGrab();
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+	    UPrimitiveComponent* getComponentToGrab();
 
-	void setComponentToGrab(UPrimitiveComponent* val);
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+	    void setComponentToGrab(UPrimitiveComponent* val);
 
 public:	
 	// Called every frame
