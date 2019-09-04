@@ -78,7 +78,7 @@ void UGrabber::Grab()
 					ComponentToGrab->SetSimulatePhysics("true");
 				}
 
-				UE_LOG(LogTemp, Warning, TEXT("Grabbing object"));
+				UE_LOG(LogTemp, Warning, TEXT("Grabbing object %s"), *(ComponentToGrab->GetName()) );
 				PhysicsHandle->GrabComponentAtLocationWithRotation
 				(
 					ComponentToGrab, 
@@ -143,7 +143,7 @@ FHitResult UGrabber::GetFirstObjectHit()
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), 
 		TraceComp);
 
-	AActor *HitActor = HitResult.GetActor();
+	AActor *HitActor = HitResult.GetActor(); 
 	if(HitActor != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Actor Found: %s"), *(HitActor->GetName()) );
