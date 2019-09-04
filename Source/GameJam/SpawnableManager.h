@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "Components/BoxComponent.h"
 #include "Engine/World.h"
+#include "UObject/Class.h"
+
 #include "SpawnableManager.generated.h"
 
 
@@ -24,12 +26,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
 	int32 NumberOfCopies = 3;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
-	int32 CommonScale = 0.5;
 	
-
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	void ManageInteractables(TArray<AActor*> ObjectToSpawn, UBoxComponent* CollisionVol);
+	void ManageInteractables(UClass* SpawningActorsClass, TArray<AActor*> ObjectToSpawn, UBoxComponent* CollisionVol);
 
 public:	
 	// Called every frame
