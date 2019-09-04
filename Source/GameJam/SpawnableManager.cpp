@@ -19,7 +19,7 @@ void USpawnableManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	
 	
 }
 
@@ -34,23 +34,22 @@ void USpawnableManager::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 }
 
 
-void USpawnableManager::ManageInteractables(TArray<AActor*> ObjectToSpawn, UBoxComponent* CollisionVol)
+void USpawnableManager::ManageInteractables(UClass* SpawningActorsClass, TArray<AActor*> ObjectToSpawn, UBoxComponent* CollisionVol)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Length: %d "), ObjectToSpawn.Num() );
+	//UE_LOG(LogTemp, Warning, TEXT("Class Name: %s "), *SpawningActorsClass->GetName() );
+	
 	
 
-	/*
 	
 	// chk if the length of array is less or equals to 2
 	
-	if (ObjectToSpawn.Num())
+	if (ObjectToSpawn.Num() <= 2)
 	{
-		GetWorld()->SpawnActor<ObjectToSpawn>(
-		CollisionVol.GetRelativeTransform().GetLocation(), 
-		CollisionVol.GetRelativeTransform().GetRotation(), 
-		FVector(CommonScale, CommonScale, CommonScale)));
+		auto Aktor = GetWorld()->SpawnActor(SpawningActorsClass, &CollisionVol->GetRelativeTransform(), FActorSpawnParameters() );
+		UE_LOG(LogTemp, Warning, TEXT("Actor Added: %s "), *Aktor->GetName());
+
 	}
-	else
+	/*else
 	{
 
 	}*/
