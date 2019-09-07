@@ -104,7 +104,7 @@ void UMovable::CalculateTime(UStaticMeshComponent* ObjectA, UStaticMeshComponent
 	MaxTime = UKismetMathLibrary::Abs_Int( UKismetMathLibrary::FTrunc
 	(
 		(ObjectB->GetRelativeTransform().GetLocation().Z) - (ObjectA->GetRelativeTransform().GetLocation().Z)
-	   ) / Rate );
+	   ) / Speed);
 
 }
 
@@ -160,20 +160,19 @@ void UMovable::Switcher()
 void UMovable::PerformAnimation(UStaticMeshComponent* Platform)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("bNearBtnA = %s, bNearBtnB = %s"), (bNearBtnA ? TEXT("true") : TEXT("false")), (bNearBtnB ? TEXT("true") : TEXT("false")) );
+	
 	if (bNearBtnA || bNearBtnB)
 	{
 		FVector NewLocation = Platform->GetRelativeTransform().GetLocation();
 		
-		if (bIncrease && (CurrentTime <= MaxTime))
+		if (bIncrease && bPlatformAtA) 
 		{
-			CurrentTime += ASecond;
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Rate*DirectionToMove) ));
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed*DirectionToMove) )); // Direction = +1
 		}
 
-		if (!bIncrease && (CurrentTime >= 0))
+		if (!bIncrease && !bPlatformAtA) 
 		{
-			CurrentTime -= ASecond;
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Rate*DirectionToMove) ));
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed*DirectionToMove) )); //Direction = -1
 		}
 	}
 	

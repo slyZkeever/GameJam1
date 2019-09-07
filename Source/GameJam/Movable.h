@@ -25,9 +25,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
-		int Rate = 4;
-
+	UPROPERTY(EditAnywhere, Category = "ClassVars")
+		int32 Speed = 4; //4 is default value
+	
 	bool bPlatformAtA = true;
 
 	bool bIncrease = false;
@@ -43,9 +43,7 @@ protected:
 	int32 MaxTime = 0;
 	int32 CurrentTime = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
-	int32 ASecond = 1;
-
+	
 	//-------------------------------------
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
 		void setbPlatformAtA(bool Val);
