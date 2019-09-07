@@ -23,7 +23,7 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 
 	FindPhysicsHandle();
-	AllowInput();
+	
 	
 	MyCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
 	if (!MyCharacter)
@@ -51,14 +51,7 @@ void UGrabber::FindPhysicsHandle() //find "PhysicsHandleComponent" added in BP C
 	
 }
 
-void UGrabber::AllowInput() //find "InputComponent"
-{
-	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
-	if (!InputComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("InputComponent Not Found!"));
-	}	
-}
+
 
 void UGrabber::Grab()
 {
@@ -77,7 +70,7 @@ void UGrabber::Grab()
 				{
 					ComponentToGrab->SetSimulatePhysics("true");
 				}
-
+				//ComponentToGrab->SetMaterialByName();
 				UE_LOG(LogTemp, Warning, TEXT("Grabbing object %s"), *(ComponentToGrab->GetName()) );
 				PhysicsHandle->GrabComponentAtLocationWithRotation
 				(
