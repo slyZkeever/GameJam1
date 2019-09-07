@@ -19,7 +19,7 @@ void USpawnableManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+	UE_LOG(LogTemp, Warning, TEXT("Actor Array's size: %d"), SpawnActorArray->Num() );
 	
 }
 
@@ -34,27 +34,20 @@ void USpawnableManager::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 }
 
 
-void USpawnableManager::ManageInteractables(UClass* SpawningActorsClass, TArray<AActor*> ObjectToSpawn, UBoxComponent* CollisionVol)
+void USpawnableManager::ManageInteractables(UBoxComponent* CollisionVol)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Class Name: %s "), *SpawningActorsClass->GetName() );
-	
-	
+	// create an array of BpInteractable object
 
-	
-	// chk if the length of array is less or equals to 2
-	
-	if (ObjectToSpawn.Num() <= 2)
+	if (SpawnActor)
 	{
-		auto Aktor = GetWorld()->SpawnActor(SpawningActorsClass, &CollisionVol->GetRelativeTransform(), FActorSpawnParameters() );
-		UE_LOG(LogTemp, Warning, TEXT("Actor Added: %s "), *Aktor->GetName());
-
+		//UE_LOG(LogTemp, Warning, TEXT("BP Class Name: %s"), *SpawningActorsClass->GetName());
+		TArray<SpawnActor> ActorArray;
 	}
-	/*else
-	{
 
-	}*/
-
-	//if yes, spawn an interactable at var location 
-	//if no, chk for the interactable still simulating physics. if none is sim physics, del 1st one.
+	// chk if the length of array is less or equals to NumberOfCopies-1
+	
+	//if yes, spawn an interactable at CollisionVol's location 
+	
+	//if no, chk for the interactable that is still simulating physics. if none is sim physics, del 1st one.
 	   
 }

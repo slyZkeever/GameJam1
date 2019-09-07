@@ -24,11 +24,16 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
+	UPROPERTY(EditAnywhere, Category = "ClassVars")
 	int32 NumberOfCopies = 3;
 	
+	/*UPROPERTY(EditAnywhere, Category = "ClassVars")
+		UClass* SpawningActorsClass;*/
+	UPROPERTY(EditAnywhere, Category = "ClassVars")
+		TArray< TSubclassOf<class AActor> > SpawnActorArray;
+
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	void ManageInteractables(UClass* SpawningActorsClass, TArray<AActor*> ObjectToSpawn, UBoxComponent* CollisionVol);
+	void ManageInteractables(UBoxComponent* CollisionVol);
 
 public:	
 	// Called every frame
