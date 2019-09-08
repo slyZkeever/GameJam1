@@ -28,17 +28,24 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		float Reach = 160.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
-		int ForceApplied = 200000;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,  Category = "ClassVars")
+		int32 ForceApplied = 200000;
 
-	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	    UPrimitiveComponent* getComponentToGrab();
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
+		FName TagForInteraction;
 
-	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	    void setComponentToGrab(UPrimitiveComponent* val);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
+		UMaterialInterface* DefaultMat = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
+		UMaterialInterface* OnGrabMat = nullptr;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
+		TSubclassOf<AActor>KeyClass;
+
 
 public:	
 	// Called every frame
@@ -62,20 +69,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 		bool GetGrabbed();
 
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		UPrimitiveComponent* GetGrabbedComponent();
+
+		void setGrabbedComponent(UPrimitiveComponent* val);
+
 private: 
 	
 	bool Grabbed = 0;
 
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
-	UInputComponent* InputComponent = nullptr;
-
-	UPrimitiveComponent* ComponentToGrab = nullptr;
-	
 	ACharacter* MyCharacter = nullptr;
 
 	UCameraComponent* PlayerCam = nullptr;
 
-
+	UPrimitiveComponent* GrabbedComponent = nullptr;
 	
 };

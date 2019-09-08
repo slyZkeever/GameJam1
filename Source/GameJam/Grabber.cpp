@@ -66,6 +66,9 @@ void UGrabber::Grab()
 		{
 			if (Actor)
 			{
+				
+							
+				
 				if (!(ComponentToGrab->IsSimulatingPhysics()))
 				{
 					ComponentToGrab->SetSimulatePhysics("true");
@@ -79,6 +82,15 @@ void UGrabber::Grab()
 					ComponentToGrab->GetOwner()->GetActorLocation(), 
 					ComponentToGrab->GetOwner()->GetActorRotation()
 				);
+				if ( KeyClass && (KeyClass != Actor->GetClass()) ) //the key from project has defined changes in mat in Bp_Keyhole class 
+				{
+					if (OnGrabMat)
+					{
+						ComponentToGrab->SetMaterial(0, OnGrabMat);
+
+					}
+				}
+				
 				
 				Grabbed = 1;
 			}
@@ -86,9 +98,11 @@ void UGrabber::Grab()
 			{
 				if (Grabbed == 1)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Releasing object"));
-					PhysicsHandle->ReleaseComponent();
-					Grabbed = 0;
+					if (DefaultMat)
+					{
+						ComponentToGrab->SetMaterial(0, DefaultMat);
+					}
+					Drop();
 				}
 			}
 			
@@ -98,6 +112,13 @@ void UGrabber::Grab()
 
 void UGrabber::Drop()
 {
+	UPrimitiveComponent* ComponentToGrab = GetFirstObjectHit().GetComponent();
+
+	if (DefaultMat)
+	{
+		ComponentToGrab->SetMaterial(0, DefaultMat);
+	}
+
 	UE_LOG(LogTemp, Warning, TEXT("Releasing object"));
 	PhysicsHandle->ReleaseComponent();
 	Grabbed = 0;
@@ -105,17 +126,25 @@ void UGrabber::Drop()
 
 void UGrabber::Throw()
 {
-	auto HitResult = GetFirstObjectHit();
-	auto ComponentToGrab = HitResult.GetComponent();
-	auto Actor = HitResult.GetActor();
+	FHitResult HitResult = GetFirstObjectHit();
+	UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
+	AActor* Actor = HitResult.GetActor();
 
 	if (Actor)
 	{
 		if (Grabbed == 1)
 		{
 			float ForceMagnitude = ForceApplied / (ComponentToGrab->GetMass());
+			
 			UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f with Force: %f"), ComponentToGrab->GetMass(), ForceMagnitude);
+			
 			ComponentToGrab->AddForce( (PlayerCam->GetForwardVector() * ForceMagnitude), NAME_None, 0);
+			
+			if (DefaultMat)
+			{
+				ComponentToGrab->SetMaterial(0, DefaultMat);
+			}
+			
 			Drop();
 		}
 	}
@@ -139,7 +168,7 @@ FHitResult UGrabber::GetFirstObjectHit()
 	AActor *HitActor = HitResult.GetActor(); 
 	if(HitActor != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Actor Found: %s"), *(HitActor->GetName()) );
+		//UE_LOG(LogTemp, Warning, TEXT("Actor Found: %s"), *(HitActor->GetName()) );
 	}
 
 	return HitResult;
@@ -180,15 +209,16 @@ bool UGrabber::GetGrabbed()
 	return Grabbed;
 }
 
-UPrimitiveComponent * UGrabber::getComponentToGrab()
+void UGrabber::setGrabbedComponent(UPrimitiveComponent * val)
 {
-	return ComponentToGrab;
+	GrabbedComponent = val;
 }
 
-void UGrabber::setComponentToGrab(UPrimitiveComponent * val)
+UPrimitiveComponent* UGrabber::GetGrabbedComponent()
 {
-	ComponentToGrab = val;
+	return GrabbedComponent;
 }
+
 
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
