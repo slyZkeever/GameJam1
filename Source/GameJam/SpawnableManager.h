@@ -29,8 +29,8 @@ protected:
 	
 	/*UPROPERTY(EditAnywhere, Category = "ClassVars")
 		UClass* SpawningActorsClass;*/
-	UPROPERTY(EditAnywhere, Category = "ClassVars")
-		TArray< TSubclassOf<class AActor> > SpawnActorArray;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
+		TSubclassOf<class AActor> SpawnActorClass;
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 	void ManageInteractables(UBoxComponent* CollisionVol);
