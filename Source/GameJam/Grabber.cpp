@@ -209,17 +209,6 @@ bool UGrabber::GetGrabbed()
 	return Grabbed;
 }
 
-void UGrabber::setGrabbedComponent(UPrimitiveComponent * val)
-{
-	GrabbedComponent = val;
-}
-
-UPrimitiveComponent* UGrabber::GetGrabbedComponent()
-{
-	return GrabbedComponent;
-}
-
-
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

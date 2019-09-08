@@ -69,11 +69,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 		bool GetGrabbed();
 
-	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		UPrimitiveComponent* GetGrabbedComponent();
-
-		void setGrabbedComponent(UPrimitiveComponent* val);
-
 private: 
 	
 	bool Grabbed = 0;
@@ -84,6 +79,6 @@ private:
 
 	UCameraComponent* PlayerCam = nullptr;
 
-	UPrimitiveComponent* GrabbedComponent = nullptr;
+	
 	
 };
