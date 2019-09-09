@@ -114,11 +114,14 @@ void UGrabber::Drop()
 {
 	UPrimitiveComponent* ComponentToGrab = GetFirstObjectHit().GetComponent();
 
-	if (DefaultMat)
+	if (ComponentToGrab)
 	{
-		ComponentToGrab->SetMaterial(0, DefaultMat);
+		if (DefaultMat)
+		{
+			ComponentToGrab->SetMaterial(0, DefaultMat);
+		}
 	}
-
+		
 	UE_LOG(LogTemp, Warning, TEXT("Releasing object"));
 	PhysicsHandle->ReleaseComponent();
 	Grabbed = 0;
