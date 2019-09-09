@@ -19,7 +19,8 @@ void USpawnableManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("Actor Array's size: %d"), SpawnActorArray.Num() );
+	//TArray<SpawnActorClass> ActorArray;
+	//UE_LOG(LogTemp, Warning, TEXT("Actor Array's size: %d"), SpawnActorArray.Num() );
 	
 }
 
@@ -37,7 +38,7 @@ void USpawnableManager::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 void USpawnableManager::ManageInteractables(UBoxComponent* CollisionVol)
 {
 	// create an array of BpInteractable object
-	TArray<SpawnActorClass>
+	//TArray<SpawnActorClass>
 	/*if (SpawnActor)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("BP Class Name: %s"), *SpawningActorsClass->GetName());
