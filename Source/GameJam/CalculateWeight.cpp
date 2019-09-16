@@ -23,7 +23,6 @@ void UCalculateWeight::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
 }
 
 
@@ -39,15 +38,16 @@ void UCalculateWeight::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 float UCalculateWeight::AddMass(UPrimitiveComponent* Collider, FName ComponentsTag)
 {
 	float CalculatedMass = 0;
-	
+
 	//get overlapping actors, set it to an array
 	Collider->GetOverlappingActors(OverlappingActorArray, TSubclassOf<AActor>());
-	
+
 	for (int32 i = 0; i != OverlappingActorArray.Num(); ++i)
 	{
+				
 		//get the actor component that has the tag.
-		TArray<UActorComponent*>ComponentArray = OverlappingActorArray[i]->GetComponentsByTag(TSubclassOf<UActorComponent>(), ComponentsTag);
-		
+		TArray<UActorComponent*>ComponentArray = OverlappingActorArray[i]->GetComponentsByTag(UStaticMeshComponent::StaticClass(), ComponentsTag);
+				
 		//cast to static mesh component. get mass. add to CalculatedMass. 
 		for (int32 i = 0; i != ComponentArray.Num(); ++i)
 		{
@@ -65,14 +65,18 @@ float UCalculateWeight::AddMass(UPrimitiveComponent* Collider, FName ComponentsT
 float UCalculateWeight::SubtractMass(AActor* ActorEndOverlap, FName ComponentsTag)
 {
 	float CalculatedMass = 0;
-	
-	//find the no-more-overlapping actor from array
-	for (int32 i = 0; i != OverlappingActorArray.Num(); ++i)
-	{
-		//get the actor component that has the tag.
-		TArray<UActorComponent*>ComponentArray = OverlappingActorArray[i]->GetComponentsByTag(TSubclassOf<UActorComponent>(), ComponentsTag);
+	int RemovingActorsindex = 0;
 
-		//cast to static mesh component. get mass. subtract from CalculatedMass. 
+	//finding player that left from overlapping array
+	if ( OverlappingActorArray.Find(ActorEndOverlap, RemovingActorsindex) )  
+	{
+
+		//get the actor component that has the tag.
+		TArray<UActorComponent*>ComponentArray = OverlappingActorArray[RemovingActorsindex]->GetComponentsByTag(
+			UStaticMeshComponent::StaticClass(), ComponentsTag
+		);
+
+		//cast to static mesh component. get mass. add to CalculatedMass. 
 		for (int32 i = 0; i != ComponentArray.Num(); ++i)
 		{
 			UStaticMeshComponent* StaticComponent = Cast<UStaticMeshComponent>(ComponentArray[i]);
@@ -82,6 +86,7 @@ float UCalculateWeight::SubtractMass(AActor* ActorEndOverlap, FName ComponentsTa
 			}
 		}
 	}
-	
+
+		
 	return CalculatedMass;
 }
