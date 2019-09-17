@@ -32,5 +32,7 @@ public:
 
 private:
 	TArray<AActor*> OverlappingActorArray;
+
+	float CalculatedMass = 0;
 	
 };
