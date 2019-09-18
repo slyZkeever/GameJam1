@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SpawnableManager.h"
+#include "Classes/Components/StaticMeshComponent.h"
 
 
 // Sets default values for this component's properties
@@ -34,21 +35,51 @@ void USpawnableManager::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
-
-void USpawnableManager::ManageInteractables(UBoxComponent* CollisionVol)
+void USpawnableManager::SpawnInteractables(TArray<AActor*> SpawnActorArr, UPrimitiveComponent* SpawnCollider)
 {
-	// create an array of BpInteractable object
-	//TArray<SpawnActorClass>
-	/*if (SpawnActor)
+	if (SpawnCollider && SpawnActorClass)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("BP Class Name: %s"), *SpawningActorsClass->GetName());
-		TArray<SpawnActor> ActorArray;
-	}*/
+		AActor* Actor = GetWorld()->SpawnActor<AActor>(SpawnActorClass, SpawnCollider->GetComponentTransform());
+		
+		UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *Actor->GetName());
 
-	// chk if the length of array is less or equals to NumberOfCopies-1
-	
-	//if yes, spawn an interactable at CollisionVol's location 
-	
-	//if no, chk for the interactable that is still simulating physics. if none is sim physics, del 1st one.
-	   
+		SpawnActorArr.Add(Actor);
+		UStaticMeshComponent* Mesh = Actor->FindComponentByClass<UStaticMeshComponent>();
+		Mesh->SetSimulatePhysics(true);
+		Mesh->SetMassOverrideInKg(NAME_None, CubeMass, true);
+	}
+}
+
+void USpawnableManager::DeleteInteractables(TArray<AActor*> SpawnActorArr)
+{
+	bool Removed = false;
+
+	for (uint8 i = SpawnActorArr.Num(); i >= 0; i--)
+	{
+		//AActor* Actor = SpawnActorArray[i];
+		
+		if(SpawnActorArr[i]->FindComponentByClass<UStaticMeshComponent>()->IsSimulatingPhysics() )
+		{
+			
+			if (GetWorld()->DestroyActor(SpawnActorArr[i]))
+			{
+				SpawnActorArr.Remove(SpawnActorArr[i]);
+				Removed = true;
+			}
+		}
+
+		break;
+	}
+
+	if ( !Removed && SpawnActorArr[0]->IsValidLowLevel() )
+	{
+		
+		
+		if (GetWorld()->DestroyActor(SpawnActorArr[0]))
+		{
+			SpawnActorArr.Remove(SpawnActorArr[0]);
+			Removed = true;
+		}
+	}
+
 }

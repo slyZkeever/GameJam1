@@ -25,15 +25,27 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, Category = "ClassVars")
-	int32 NumberOfCopies = 3;
+	    uint8 NumberOfCopies = 3;
+
+	UPROPERTY(EditAnywhere, Category = "ClassVars")
+		float CubeMass = 1.0f;
 	
-	/*UPROPERTY(EditAnywhere, Category = "ClassVars")
-		UClass* SpawningActorsClass;*/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
 		TSubclassOf<class AActor> SpawnActorClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
+		TArray< TSubclassOf<class AActor> > SpawnActorArray;
+
+	/*UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
+		TSubclassOf<class AActor> SpawnActorClass;*/
+	/*UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void ManageActors(TArray<AActor*> SpawnActorArray, UPrimitiveComponent* SpawnCollider);*/
+
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	void ManageInteractables(UBoxComponent* CollisionVol);
+	    void SpawnInteractables(TArray<AActor*> SpawnActorArr, UPrimitiveComponent* SpawnCollider);
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void DeleteInteractables(TArray<AActor*> SpawnActorArr);
 
 public:	
 	// Called every frame
