@@ -4,14 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "PhysicsEngine/PhysicsHandleComponent.h"
-#include "Components/InputComponent.h"
-#include "Components/PrimitiveComponent.h"
+
 #include "Camera/CameraComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
-#include "CollisionQueryParams.h"
+#include "Materials/MaterialInterface.h"
+#include "UObject/NameTypes.h"
+#include "Templates/SubclassOf.h" 	
+#include "Engine/EngineTypes.h"
+#include "Math/Vector.h"
+
 #include "Grabber.generated.h"
 
 

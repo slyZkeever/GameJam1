@@ -5,9 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "Math/Vector.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "Components/BoxComponent.h"
 
 #include "Movable.generated.h"
 
