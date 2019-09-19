@@ -2,6 +2,12 @@
 
 #include "Grabber.h"
 
+#include "Components/PrimitiveComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
+#include "CollisionQueryParams.h"
+
 
 
 #define OUT
@@ -66,9 +72,6 @@ void UGrabber::Grab()
 		{
 			if (Actor)
 			{
-				
-							
-				
 				if (!(ComponentToGrab->IsSimulatingPhysics()))
 				{
 					ComponentToGrab->SetSimulatePhysics("true");
@@ -90,7 +93,6 @@ void UGrabber::Grab()
 
 					}
 				}
-				
 				
 				Grabbed = 1;
 			}
