@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Components/BoxComponent.h"
-#include "Engine/World.h"
-#include "UObject/Class.h"
+
+#include "Components/PrimitiveComponent.h"
+#include "Containers/Array.h"
+#include "Templates/SubclassOf.h"
 
 #include "SpawnableManager.generated.h"
 
@@ -25,27 +26,21 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, Category = "ClassVars")
-	    uint8 NumberOfCopies = 3;
-
-	UPROPERTY(EditAnywhere, Category = "ClassVars")
 		float CubeMass = 1.0f;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		TSubclassOf<class AActor> SpawnActorClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ClassVars")
-		TArray< TSubclassOf<class AActor> > SpawnActorArray;
-
-	/*UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
-		TSubclassOf<class AActor> SpawnActorClass;*/
-	/*UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		void ManageActors(TArray<AActor*> SpawnActorArray, UPrimitiveComponent* SpawnCollider);*/
+	TArray<AActor*> SpawnActorArray;
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	    void SpawnInteractables(TArray<AActor*> SpawnActorArr, UPrimitiveComponent* SpawnCollider);
+	    void SpawnInteractables( UPrimitiveComponent* SpawnCollider);
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		void DeleteInteractables(TArray<AActor*> SpawnActorArr);
+		void DeleteInteractables();
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+	    int GetArrayLength();
 
 public:	
 	// Called every frame
