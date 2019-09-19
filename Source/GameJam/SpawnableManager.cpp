@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SpawnableManager.h"
-#include "Classes/Components/StaticMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/World.h"
+#include "GameFramework/Actor.h"
 
 
 // Sets default values for this component's properties
@@ -35,7 +37,7 @@ void USpawnableManager::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
-void USpawnableManager::SpawnInteractables(TArray<AActor*> SpawnActorArr, UPrimitiveComponent* SpawnCollider)
+void USpawnableManager::SpawnInteractables( UPrimitiveComponent* SpawnCollider)
 {
 	if (SpawnCollider && SpawnActorClass)
 	{
@@ -43,43 +45,60 @@ void USpawnableManager::SpawnInteractables(TArray<AActor*> SpawnActorArr, UPrimi
 		
 		UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *Actor->GetName());
 
-		SpawnActorArr.Add(Actor);
+		SpawnActorArray.Add(Actor);
 		UStaticMeshComponent* Mesh = Actor->FindComponentByClass<UStaticMeshComponent>();
 		Mesh->SetSimulatePhysics(true);
 		Mesh->SetMassOverrideInKg(NAME_None, CubeMass, true);
 	}
 }
 
-void USpawnableManager::DeleteInteractables(TArray<AActor*> SpawnActorArr)
+void USpawnableManager::DeleteInteractables()
 {
 	bool Removed = false;
+	int32 DelIdx = -1;
 
-	for (uint8 i = SpawnActorArr.Num(); i >= 0; i--)
+	for (int32 i = SpawnActorArray.Num() -1 ; i != -1; i--)
 	{
-		//AActor* Actor = SpawnActorArray[i];
-		
-		if(SpawnActorArr[i]->FindComponentByClass<UStaticMeshComponent>()->IsSimulatingPhysics() )
-		{
-			
-			if (GetWorld()->DestroyActor(SpawnActorArr[i]))
-			{
-				SpawnActorArr.Remove(SpawnActorArr[i]);
-				Removed = true;
-			}
-		}
+		//UE_LOG(LogTemp, Warning, TEXT("index: %d"), i);
 
-		break;
-	}
-
-	if ( !Removed && SpawnActorArr[0]->IsValidLowLevel() )
-	{
-		
-		
-		if (GetWorld()->DestroyActor(SpawnActorArr[0]))
+		if(SpawnActorArray[i]->FindComponentByClass<UStaticMeshComponent>()->IsSimulatingPhysics()) //sim physics 1 = not attached
 		{
-			SpawnActorArr.Remove(SpawnActorArr[0]);
+			UE_LOG(LogTemp, Warning, TEXT("Deleting Actor: %s"), *SpawnActorArray[i]->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("index: %d"), i);		
+
+			DelIdx = i; //remove earliest object that still sim physics
 			Removed = true;
 		}
+
 	}
 
+	if (Removed)
+	{
+		if (!SpawnActorArray[DelIdx]) return;
+
+		if (!SpawnActorArray[DelIdx]->IsValidLowLevel()) return;
+
+		SpawnActorArray[DelIdx]->K2_DestroyActor();
+
+		SpawnActorArray.RemoveAt(DelIdx);
+	}
+
+	if ( !Removed)
+	{
+		if (!SpawnActorArray[0]) return;
+
+		if (!SpawnActorArray[0]->IsValidLowLevel()) return;
+
+		SpawnActorArray[0]->K2_DestroyActor();
+
+		SpawnActorArray.RemoveAt(0);
+
+		Removed = true;
+	}
+
+}
+
+int USpawnableManager::GetArrayLength()
+{
+	return SpawnActorArray.Num();
 }
