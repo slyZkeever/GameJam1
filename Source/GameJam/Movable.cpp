@@ -167,14 +167,16 @@ void UMovable::PerformAnimation(UStaticMeshComponent* Platform)
 	{
 		FVector NewLocation = Platform->GetRelativeTransform().GetLocation();
 		
-		if (bIncrease && bPlatformAtA) 
+		//wait for player input
+
+		if (bIncrease && bPlatformAtA)  //remove bIncrease to auto move platform
 		{
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed*DirectionToMove) )); // Direction = +1
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed) )); // Direction
 		}
 
-		if (!bIncrease && !bPlatformAtA) 
+		if (!bIncrease && !bPlatformAtA)
 		{
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed*DirectionToMove) )); //Direction = -1
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed*(-1)) )); //move back
 		}
 	}
 	
