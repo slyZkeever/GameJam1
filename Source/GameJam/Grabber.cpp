@@ -76,8 +76,10 @@ void UGrabber::Grab()
 				{
 					ComponentToGrab->SetSimulatePhysics("true");
 				}
+
 				//ComponentToGrab->SetMaterialByName();
-				UE_LOG(LogTemp, Warning, TEXT("Grabbing object %s"), *(ComponentToGrab->GetName()) );
+				//UE_LOG(LogTemp, Warning, TEXT("Grabbing object %s"), *(ComponentToGrab->GetName()) );
+				
 				PhysicsHandle->GrabComponentAtLocationWithRotation
 				(
 					ComponentToGrab, 
@@ -124,7 +126,7 @@ void UGrabber::Drop()
 		}
 	}
 		
-	UE_LOG(LogTemp, Warning, TEXT("Releasing object"));
+	//UE_LOG(LogTemp, Warning, TEXT("Releasing object"));
 	PhysicsHandle->ReleaseComponent();
 	Grabbed = 0;
 }
@@ -141,7 +143,7 @@ void UGrabber::Throw()
 		{
 			float ForceMagnitude = ForceApplied / (ComponentToGrab->GetMass());
 			
-			UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f with Force: %f"), ComponentToGrab->GetMass(), ForceMagnitude);
+			//UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f with Force: %f"), ComponentToGrab->GetMass(), ForceMagnitude);
 			
 			ComponentToGrab->AddForce( (PlayerCam->GetForwardVector() * ForceMagnitude), NAME_None, 0);
 			
