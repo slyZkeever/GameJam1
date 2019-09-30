@@ -34,7 +34,6 @@ void USpawnableManager::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 
 void USpawnableManager::SpawnInteractables( UPrimitiveComponent* SpawnCollider)
@@ -50,9 +49,10 @@ void USpawnableManager::SpawnInteractables( UPrimitiveComponent* SpawnCollider)
 		Mesh->SetSimulatePhysics(true);
 		Mesh->SetMassOverrideInKg(NAME_None, CubeMass, true);
 	}
+
 }
 
-void USpawnableManager::DeleteInteractables()
+void USpawnableManager::DeleteExtraInteractables()
 {
 	bool Removed = false;
 	int32 DelIdx = -1;
@@ -101,4 +101,13 @@ void USpawnableManager::DeleteInteractables()
 int USpawnableManager::GetArrayLength()
 {
 	return SpawnActorArray.Num();
+}
+
+void USpawnableManager::DestroySpecificInteractable(int DelIdx)
+{
+	/*SpawnActorArray->find
+
+	SpawnActorArray[DelIdx]->K2_DestroyActor();
+
+	SpawnActorArray.RemoveAt(DelIdx);*/
 }

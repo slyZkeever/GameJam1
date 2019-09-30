@@ -37,7 +37,10 @@ protected:
 	    void SpawnInteractables( UPrimitiveComponent* SpawnCollider);
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		void DeleteInteractables();
+		void DeleteExtraInteractables();
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void DestroySpecificInteractable(int DelIdx);
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 	    int GetArrayLength();
