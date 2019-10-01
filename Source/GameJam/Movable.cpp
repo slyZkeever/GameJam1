@@ -101,7 +101,7 @@ int UMovable::getDirectionToMove()
 }
 //-----------------------
 
-void UMovable::CalculateTime(UStaticMeshComponent* ObjectA, UStaticMeshComponent* ObjectB)
+void UMovable::CalculateTime(UPrimitiveComponent* ObjectA, UPrimitiveComponent* ObjectB)
 {
 	MaxTime = UKismetMathLibrary::Abs_Int( UKismetMathLibrary::FTrunc
 	(

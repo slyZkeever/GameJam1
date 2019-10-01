@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/PrimitiveComponent.h"
 
 #include "Movable.generated.h"
 
@@ -76,7 +76,7 @@ protected:
 
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		void CalculateTime(UStaticMeshComponent* ObjectA, UStaticMeshComponent* ObjectB);
+		void CalculateTime(UPrimitiveComponent* ObjectA, UPrimitiveComponent* ObjectB);
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 		void Switcher();
