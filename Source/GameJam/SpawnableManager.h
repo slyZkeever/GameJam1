@@ -40,7 +40,7 @@ protected:
 		void DeleteExtraInteractables();
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		void DestroySpecificInteractable(int DelIdx);
+		void DestroySpecificInteractable(AActor* ActorToDestory);
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 	    int GetArrayLength();

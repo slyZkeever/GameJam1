@@ -103,11 +103,16 @@ int USpawnableManager::GetArrayLength()
 	return SpawnActorArray.Num();
 }
 
-void USpawnableManager::DestroySpecificInteractable(int DelIdx)
+void USpawnableManager::DestroySpecificInteractable(AActor* ActorToDestory)
 {
-	/*SpawnActorArray->find
+	if (!ActorToDestory) return;
+	if (ActorToDestory->IsValidLowLevel()) return;
+	
+	int32 DelIdx = SpawnActorArray.Find(ActorToDestory);
+	UE_LOG(LogTemp, Warning, TEXT("Destroying actor at index: %d"), DelIdx);
 
 	SpawnActorArray[DelIdx]->K2_DestroyActor();
+	SpawnActorArray.RemoveAt(DelIdx);
 
-	SpawnActorArray.RemoveAt(DelIdx);*/
+	UE_LOG(LogTemp, Warning, TEXT("Actor Array's size: %d"), SpawnActorArray.Num());
 }
