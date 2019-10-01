@@ -17,12 +17,12 @@
 #include "Grabber.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class GAMEJAM_API UGrabber : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UGrabber();
 
@@ -33,7 +33,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		float Reach = 160.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,  Category = "ClassVars")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		int32 ForceApplied = 200000;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
@@ -44,19 +44,19 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		UMaterialInterface* OnGrabMat = nullptr;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		TSubclassOf<AActor>KeyClass;
 
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void FindPhysicsHandle();
-	
+
 	FHitResult GetFirstObjectHit();
-	
+
 	FVector GetLineTraceStart();
 	FVector GetLineTraceEnd();
 
@@ -71,8 +71,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 		bool GetGrabbed();
 
-private: 
-	
+private:
+
 	bool Grabbed = 0;
 
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
@@ -81,6 +81,6 @@ private:
 
 	UCameraComponent* PlayerCam = nullptr;
 
-	
-	
+
+
 };
