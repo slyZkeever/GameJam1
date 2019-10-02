@@ -73,7 +73,7 @@ public:
 
 private:
 
-	bool Grabbed = 0;
+	bool Grabbed = false;
 
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
@@ -81,6 +81,6 @@ private:
 
 	UCameraComponent* PlayerCam = nullptr;
 
-
+	bool ActorHit = false;
 
 };
