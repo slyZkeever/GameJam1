@@ -112,11 +112,9 @@ void UGrabber::Grab()
 void UGrabber::Drop()
 {
 	
-	FHitResult HitResult = GetFirstObjectHit();
-
-	if (ActorHit)
+	if (Grabbed)
 	{
-		UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
+		UPrimitiveComponent* ComponentToGrab = GetFirstObjectHit().GetComponent();
 
 		if (ComponentToGrab)
 		{
