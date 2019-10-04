@@ -30,7 +30,8 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		TSubclassOf<class AActor> SpawnActorClass;
-
+	
+	UPROPERTY()
 	TArray<AActor*> SpawnActorArray;
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
