@@ -75,10 +75,13 @@ private:
 
 	bool Grabbed = false;
 
+	UPROPERTY()
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
-
+	
+	UPROPERTY()
 	ACharacter* MyCharacter = nullptr;
-
+	
+	UPROPERTY()
 	UCameraComponent* PlayerCam = nullptr;
 
 	bool ActorHit = false;
