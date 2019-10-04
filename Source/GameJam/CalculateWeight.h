@@ -31,6 +31,8 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+
+	UPROPERTY()
 	TArray<AActor*> OverlappingActorArray;
 
 	float CalculatedMass = 0;
