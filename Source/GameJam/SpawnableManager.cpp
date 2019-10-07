@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SpawnableManager.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/World.h"
+#include "GameFramework/Actor.h"
 
 
 // Sets default values for this component's properties
@@ -31,24 +34,85 @@ void USpawnableManager::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 
-
-void USpawnableManager::ManageInteractables(UBoxComponent* CollisionVol)
+void USpawnableManager::SpawnInteractables( UPrimitiveComponent* SpawnCollider)
 {
-	// create an array of BpInteractable object
-	//TArray<SpawnActorClass>
-	/*if (SpawnActor)
+	if (SpawnCollider && SpawnActorClass)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("BP Class Name: %s"), *SpawningActorsClass->GetName());
-		TArray<SpawnActor> ActorArray;
-	}*/
+		AActor* Actor = GetWorld()->SpawnActor<AActor>(SpawnActorClass, SpawnCollider->GetComponentTransform());
+		
+		UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *Actor->GetName());
 
-	// chk if the length of array is less or equals to NumberOfCopies-1
+		SpawnActorArray.Add(Actor);
+		UStaticMeshComponent* Mesh = Actor->FindComponentByClass<UStaticMeshComponent>();
+		Mesh->SetSimulatePhysics(true);
+		Mesh->SetMassOverrideInKg(NAME_None, CubeMass, true);
+	}
+
+}
+
+void USpawnableManager::DeleteExtraInteractables()
+{
+	bool Removed = false;
+	int32 DelIdx = -1;
+
+	for (int32 i = SpawnActorArray.Num() -1 ; i != -1; i--)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("index: %d"), i);
+
+		if(SpawnActorArray[i]->FindComponentByClass<UStaticMeshComponent>()->IsSimulatingPhysics()) //sim physics 1 = not attached
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Deleting Actor: %s"), *SpawnActorArray[i]->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("index: %d"), i);		
+
+			DelIdx = i; //remove earliest object that still sim physics
+			Removed = true;
+		}
+
+	}
+
+	if (Removed)
+	{
+		if (!SpawnActorArray[DelIdx]) return;
+
+		if (!SpawnActorArray[DelIdx]->IsValidLowLevel()) return;
+
+		SpawnActorArray[DelIdx]->K2_DestroyActor();
+
+		SpawnActorArray.RemoveAt(DelIdx);
+	}
+
+	if ( !Removed)
+	{
+		if (!SpawnActorArray[0]) return;
+
+		if (!SpawnActorArray[0]->IsValidLowLevel()) return;
+
+		SpawnActorArray[0]->K2_DestroyActor();
+
+		SpawnActorArray.RemoveAt(0);
+
+		Removed = true;
+	}
+
+}
+
+int USpawnableManager::GetArrayLength()
+{
+	return SpawnActorArray.Num();
+}
+
+void USpawnableManager::DestroySpecificInteractable(AActor* ActorToDestory)
+{
+	if (!ActorToDestory) return;
+	if (ActorToDestory->IsValidLowLevel()) return;
 	
-	//if yes, spawn an interactable at CollisionVol's location 
-	
-	//if no, chk for the interactable that is still simulating physics. if none is sim physics, del 1st one.
-	   
+	int32 DelIdx = SpawnActorArray.Find(ActorToDestory);
+	UE_LOG(LogTemp, Warning, TEXT("Destroying actor at index: %d"), DelIdx);
+
+	SpawnActorArray[DelIdx]->K2_DestroyActor();
+	SpawnActorArray.RemoveAt(DelIdx);
+
+	UE_LOG(LogTemp, Warning, TEXT("Actor Array's size: %d"), SpawnActorArray.Num());
 }

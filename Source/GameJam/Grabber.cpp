@@ -2,6 +2,13 @@
 
 #include "Grabber.h"
 
+#include "Components/PrimitiveComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
+#include "CollisionQueryParams.h"
+
+
 
 
 #define OUT
@@ -13,7 +20,7 @@ UGrabber::UGrabber()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	
+
 }
 
 
@@ -23,8 +30,8 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 
 	FindPhysicsHandle();
-	
-	
+
+
 	MyCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
 	if (!MyCharacter)
 	{
@@ -48,110 +55,114 @@ void UGrabber::FindPhysicsHandle() //find "PhysicsHandleComponent" added in BP C
 	{
 		UE_LOG(LogTemp, Error, TEXT("Handle Not Found!"));
 	}
-	
+
 }
 
 
 
 void UGrabber::Grab()
 {
-	auto HitResult = GetFirstObjectHit();
-	auto ComponentToGrab = HitResult.GetComponent();
-	auto Actor = HitResult.GetActor();
+	FHitResult HitResult = GetFirstObjectHit();
 	
-	if (Grabbed == 0)
+	if (ActorHit)
 	{
-		if (!PhysicsHandle) { return; }
-		else
-		{
-			if (Actor)
-			{
-				
-							
-				
-				if (!(ComponentToGrab->IsSimulatingPhysics()))
-				{
-					ComponentToGrab->SetSimulatePhysics("true");
-				}
-				//ComponentToGrab->SetMaterialByName();
-				UE_LOG(LogTemp, Warning, TEXT("Grabbing object %s"), *(ComponentToGrab->GetName()) );
-				PhysicsHandle->GrabComponentAtLocationWithRotation
-				(
-					ComponentToGrab, 
-					NAME_None, 
-					ComponentToGrab->GetOwner()->GetActorLocation(), 
-					ComponentToGrab->GetOwner()->GetActorRotation()
-				);
-				if ( KeyClass && (KeyClass != Actor->GetClass()) ) //the key from project has defined changes in mat in Bp_Keyhole class 
-				{
-					if (OnGrabMat)
-					{
-						ComponentToGrab->SetMaterial(0, OnGrabMat);
+		UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
+		AActor* Actor = HitResult.GetActor();
 
-					}
-				}
-				
-				
-				Grabbed = 1;
-			}
-			else
+		if (!PhysicsHandle) return; 
+
+		if (Actor)
+		{
+			if (!(ComponentToGrab->IsSimulatingPhysics()))
 			{
-				if (Grabbed == 1)
+			    ComponentToGrab->SetSimulatePhysics("true");
+			}
+
+		    //ComponentToGrab->SetMaterialByName();
+			//UE_LOG(LogTemp, Warning, TEXT("Grabbing object %s"), *(ComponentToGrab->GetName()) );
+
+			PhysicsHandle->GrabComponentAtLocationWithRotation
+			(
+				ComponentToGrab,
+				NAME_None,
+				ComponentToGrab->GetOwner()->GetActorLocation(),
+				ComponentToGrab->GetOwner()->GetActorRotation()
+			);
+			
+			if (KeyClass && (KeyClass != Actor->GetClass())) //the key from project has defined changes in mat in Bp_Keyhole class 
+			{
+				if (OnGrabMat)
 				{
-					if (DefaultMat)
-					{
-						ComponentToGrab->SetMaterial(0, DefaultMat);
-					}
-					Drop();
+					ComponentToGrab->SetMaterial(0, OnGrabMat);
 				}
 			}
 			
+			UE_LOG(LogTemp, Warning, TEXT("Component Found: %s"), *(ComponentToGrab->GetName()));
+
+			Grabbed = 1;
+
+			UE_LOG(LogTemp, Warning, TEXT("Grabbed is: %d"), Grabbed);
 		}
+				
 	}
+
 }
+	
 
 void UGrabber::Drop()
 {
-	UPrimitiveComponent* ComponentToGrab = GetFirstObjectHit().GetComponent();
-
-	if (ComponentToGrab)
+	
+	if (Grabbed)
 	{
-		if (DefaultMat)
+		UPrimitiveComponent* ComponentToGrab = GetFirstObjectHit().GetComponent();
+
+		if (ComponentToGrab)
 		{
-			ComponentToGrab->SetMaterial(0, DefaultMat);
+			if (DefaultMat)
+			{
+				ComponentToGrab->SetMaterial(0, DefaultMat);
+			}
 		}
+
+		PhysicsHandle->ReleaseComponent();
+		Grabbed = 0;
+
+		UE_LOG(LogTemp, Warning, TEXT("Grabbed is: %d"), Grabbed);
+
 	}
-		
-	UE_LOG(LogTemp, Warning, TEXT("Releasing object"));
-	PhysicsHandle->ReleaseComponent();
-	Grabbed = 0;
+	
 }
 
 void UGrabber::Throw()
 {
 	FHitResult HitResult = GetFirstObjectHit();
-	UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
-	AActor* Actor = HitResult.GetActor();
-
-	if (Actor)
+	
+	if (ActorHit)
 	{
-		if (Grabbed == 1)
+		UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
+		AActor* Actor = HitResult.GetActor();
+
+		if (Actor)
 		{
-			float ForceMagnitude = ForceApplied / (ComponentToGrab->GetMass());
-			
-			UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f with Force: %f"), ComponentToGrab->GetMass(), ForceMagnitude);
-			
-			ComponentToGrab->AddForce( (PlayerCam->GetForwardVector() * ForceMagnitude), NAME_None, 0);
-			
-			if (DefaultMat)
+			if (Grabbed)
 			{
-				ComponentToGrab->SetMaterial(0, DefaultMat);
+				//float ForceMagnitude = ForceApplied / (ComponentToGrab->GetMass());
+
+				//UE_LOG(LogTemp, Warning, TEXT("Throwing Object of mass %f with Force: %f"), ComponentToGrab->GetMass(), ForceMagnitude);
+
+				ComponentToGrab->AddImpulse((PlayerCam->GetForwardVector() * ForceApplied), NAME_None, false);
+
+				if (DefaultMat)
+				{
+					ComponentToGrab->SetMaterial(0, DefaultMat);
+				}
+
+				Drop();
 			}
-			
-			Drop();
 		}
 	}
 }
+
 
 FHitResult UGrabber::GetFirstObjectHit()
 {
@@ -161,15 +172,14 @@ FHitResult UGrabber::GetFirstObjectHit()
 
 	FHitResult HitResult;
 
-	GetWorld()->LineTraceSingleByObjectType(
-		OUT HitResult, 
-		GetLineTraceStart(), 
-		GetLineTraceEnd(), 
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), 
-		TraceComp);
+	ActorHit = GetWorld()->LineTraceSingleByObjectType( OUT HitResult, GetLineTraceStart(), GetLineTraceEnd(),
+                  		                                FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), TraceComp
+	                                                  );
 
-	AActor *HitActor = HitResult.GetActor(); 
-	if(HitActor != nullptr)
+	UE_LOG(LogTemp, Warning, TEXT("ActorHit: %d"), ActorHit);
+	
+	AActor *HitActor = HitResult.GetActor();
+	if (HitActor != nullptr)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Actor Found: %s"), *(HitActor->GetName()) );
 	}
@@ -179,7 +189,7 @@ FHitResult UGrabber::GetFirstObjectHit()
 
 FVector UGrabber::GetLineTraceStart()
 {
-	
+
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
@@ -217,11 +227,9 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (!PhysicsHandle) { return;  }
-	if(PhysicsHandle->GrabbedComponent)
+	if (PhysicsHandle->GrabbedComponent)
 	{
 		PhysicsHandle->SetTargetLocation(GetLineTraceEnd());
 	}
-
 }
 

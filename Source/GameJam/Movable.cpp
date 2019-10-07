@@ -2,6 +2,10 @@
 
 #include "Movable.h"
 
+#include "Components/StaticMeshComponent.h"
+#include "Math/Vector.h"
+#include "Kismet/KismetMathLibrary.h"
+
 
 // Sets default values for this component's properties
 UMovable::UMovable()
@@ -33,64 +37,39 @@ void UMovable::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 }
 
 //-------------------- getters and setters
-void UMovable::setbPlatformAtA(bool Val)
+void UMovable::setPlatformAtA(bool Val)
 {
 	bPlatformAtA = Val;
-	UE_LOG(LogTemp, Warning, TEXT("bPlatformAtA = %s"), (bPlatformAtA ? TEXT("true") : TEXT("false")));
 }
 
-bool UMovable::getbPlatformAtA()
+bool UMovable::getPlatformAtA()
 {
 	return bPlatformAtA;
 }
 
-void UMovable::setbInsideA(bool Val)
+void UMovable::setPlayerAtA(bool Val)
 {
-	bInsideA = Val;
-	UE_LOG(LogTemp, Warning, TEXT("bInsideA = %s"), (bInsideA ? TEXT("true") : TEXT("false")));
+	bPlayerAtA = Val;
 }
 
-bool UMovable::getbInsideA()
+bool UMovable::getPlayerAtA()  
 {
-	return bInsideA;
+	return bPlayerAtA;
 }
 
-void UMovable::setbInsideB(bool Val)
+void UMovable::setPlayerAtB(bool Val) 
 {
-	bInsideB = Val;
-	UE_LOG(LogTemp, Warning, TEXT("bInsideB = %s"), (bInsideB ? TEXT("true") : TEXT("false")));
+	bPlayerAtB = Val;
 }
 
-bool UMovable::getbInsideB()
+bool UMovable::getPlayerAtB()
 {
-	return bInsideB;
+	return bPlayerAtB;
 }
 
-void UMovable::setbNearBtnA(bool Val)
+bool UMovable::getIsMovingAhead()
 {
-	bNearBtnA = Val;
-	UE_LOG(LogTemp, Warning, TEXT("bNearBtnA = %s"), (bNearBtnA ? TEXT("true") : TEXT("false")));
-}
-
-bool UMovable::getbNearBtnA()
-{
-	return bNearBtnA;
-}
-
-void UMovable::setbNearBtnB(bool Val)
-{
-	bNearBtnB = Val;
-	UE_LOG(LogTemp, Warning, TEXT("bNearBtnB = %s"), (bNearBtnB ? TEXT("true") : TEXT("false")));
-}
-
-bool UMovable::getbNearBtnB()
-{
-	return bNearBtnB;
-}
-
-bool UMovable::getbIncrease()
-{
-	return bIncrease;
+	return bIsMovingAhead;
 }
 
 int UMovable::getDirectionToMove()
@@ -99,7 +78,7 @@ int UMovable::getDirectionToMove()
 }
 //-----------------------
 
-void UMovable::CalculateTime(UStaticMeshComponent* ObjectA, UStaticMeshComponent* ObjectB)
+void UMovable::CalculateTime(UPrimitiveComponent* ObjectA, UPrimitiveComponent* ObjectB)
 {
 	MaxTime = UKismetMathLibrary::Abs_Int( UKismetMathLibrary::FTrunc
 	(
@@ -111,46 +90,46 @@ void UMovable::CalculateTime(UStaticMeshComponent* ObjectA, UStaticMeshComponent
 void UMovable::Switcher()
 {
 	
-	if (bPlatformAtA && bInsideA)
+	if (bPlatformAtA && bPlayerAtA)
 	{
 		DirectionToMove = 1;
-		bIncrease = true;
+		bIsMovingAhead = true;
 		
 		UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s"), 
-			DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")));
+			DirectionToMove, (bIsMovingAhead ? TEXT("true") : TEXT("false")));
 	}
 
 	else
 	{
-		if (!bPlatformAtA && bInsideA)
+		if (!bPlatformAtA && bPlayerAtA)
 		{
 			DirectionToMove = -1;
-			bIncrease = false;
+			bIsMovingAhead = false;
 			
 			UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s"), 
-				DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")) );
+				DirectionToMove, (bIsMovingAhead ? TEXT("true") : TEXT("false")) );
 		}
 
 		else
 		{
-			if (bPlatformAtA && bInsideB)
+			if (bPlatformAtA && bPlayerAtB)
 			{
 				DirectionToMove = 1;
-				bIncrease = true;
+				bIsMovingAhead = true;
 				
 				UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s"), 
-					DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")) );
+					DirectionToMove, (bIsMovingAhead ? TEXT("true") : TEXT("false")) );
 			}
 
 			else
 			{
-				if (!bPlatformAtA && bInsideB)
+				if (!bPlatformAtA && bPlayerAtB)
 				{
 					DirectionToMove = -1;
-					bIncrease = false;
+					bIsMovingAhead = false;
 					
 					UE_LOG(LogTemp, Warning, TEXT("Direction = %d, bIncrease = %s "), 
-						DirectionToMove, (bIncrease ? TEXT("true") : TEXT("false")) );
+						DirectionToMove, (bIsMovingAhead ? TEXT("true") : TEXT("false")) );
 				}
 			}
 		}
@@ -161,19 +140,19 @@ void UMovable::PerformAnimation(UStaticMeshComponent* Platform)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("bNearBtnA = %s, bNearBtnB = %s"), (bNearBtnA ? TEXT("true") : TEXT("false")), (bNearBtnB ? TEXT("true") : TEXT("false")) );
 	
-	if (bNearBtnA || bNearBtnB)
-	{
-		FVector NewLocation = Platform->GetRelativeTransform().GetLocation();
+	FVector NewLocation = Platform->GetRelativeTransform().GetLocation();
 		
-		if (bIncrease && bPlatformAtA) 
+		//wait for player input
+
+		if (bIsMovingAhead && bPlatformAtA)  //remove bIncrease to auto move platform
 		{
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed*DirectionToMove) )); // Direction = +1
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed) )); // Direction
 		}
 
-		if (!bIncrease && !bPlatformAtA) 
+		if (!bIsMovingAhead && !bPlatformAtA)
 		{
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed*DirectionToMove) )); //Direction = -1
+			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed*(-1)) )); //move back
 		}
-	}
+	
 	
 }

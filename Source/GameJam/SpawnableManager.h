@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Components/BoxComponent.h"
-#include "Engine/World.h"
-#include "UObject/Class.h"
+
+#include "Components/PrimitiveComponent.h"
+#include "Containers/Array.h"
+#include "Templates/SubclassOf.h"
 
 #include "SpawnableManager.generated.h"
 
@@ -25,15 +26,25 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, Category = "ClassVars")
-	int32 NumberOfCopies = 3;
+		float CubeMass = 1.0f;
 	
-	/*UPROPERTY(EditAnywhere, Category = "ClassVars")
-		UClass* SpawningActorsClass;*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		TSubclassOf<class AActor> SpawnActorClass;
+	
+	UPROPERTY()
+	TArray<AActor*> SpawnActorArray;
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-	void ManageInteractables(UBoxComponent* CollisionVol);
+	    void SpawnInteractables( UPrimitiveComponent* SpawnCollider);
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void DeleteExtraInteractables();
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+		void DestroySpecificInteractable(AActor* ActorToDestory);
+
+	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
+	    int GetArrayLength();
 
 public:	
 	// Called every frame

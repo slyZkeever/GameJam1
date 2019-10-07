@@ -4,23 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "PhysicsEngine/PhysicsHandleComponent.h"
-#include "Components/InputComponent.h"
-#include "Components/PrimitiveComponent.h"
+
 #include "Camera/CameraComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
-#include "CollisionQueryParams.h"
+#include "Materials/MaterialInterface.h"
+#include "UObject/NameTypes.h"
+#include "Templates/SubclassOf.h" 	
+#include "Engine/EngineTypes.h"
+#include "Math/Vector.h"
+
 #include "Grabber.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class GAMEJAM_API UGrabber : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UGrabber();
 
@@ -31,7 +33,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		float Reach = 160.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,  Category = "ClassVars")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		int32 ForceApplied = 200000;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
@@ -42,19 +44,19 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		UMaterialInterface* OnGrabMat = nullptr;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		TSubclassOf<AActor>KeyClass;
 
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void FindPhysicsHandle();
-	
+
 	FHitResult GetFirstObjectHit();
-	
+
 	FVector GetLineTraceStart();
 	FVector GetLineTraceEnd();
 
@@ -69,16 +71,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 		bool GetGrabbed();
 
-private: 
-	
-	bool Grabbed = 0;
+private:
 
+	bool Grabbed = false;
+
+	UPROPERTY()
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
-
+	
+	UPROPERTY()
 	ACharacter* MyCharacter = nullptr;
-
+	
+	UPROPERTY()
 	UCameraComponent* PlayerCam = nullptr;
 
-	
-	
+	bool ActorHit = false;
+
 };

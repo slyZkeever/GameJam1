@@ -37,8 +37,6 @@ void UCalculateWeight::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 float UCalculateWeight::AddMass(UPrimitiveComponent* Collider, FName ComponentsTag)
 {
-	float CalculatedMass = 0;
-
 	//get overlapping actors, set it to an array
 	Collider->GetOverlappingActors(OverlappingActorArray, TSubclassOf<AActor>());
 
@@ -64,7 +62,6 @@ float UCalculateWeight::AddMass(UPrimitiveComponent* Collider, FName ComponentsT
 
 float UCalculateWeight::SubtractMass(AActor* ActorEndOverlap, FName ComponentsTag)
 {
-	float CalculatedMass = 0;
 	int RemovingActorsindex = 0;
 
 	//finding player that left from overlapping array

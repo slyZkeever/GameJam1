@@ -4,10 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Components/StaticMeshComponent.h"
-#include "Math/Vector.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "Components/BoxComponent.h"
+#include "Components/PrimitiveComponent.h"
 
 #include "Movable.generated.h"
 
@@ -30,48 +27,36 @@ protected:
 	
 	bool bPlatformAtA = true;
 
-	bool bIncrease = false;
+	bool bIsMovingAhead = false;
 
 	int DirectionToMove = 1;
 
-	bool bInsideA = false;
-	bool bInsideB = false;
+	bool bPlayerAtA = false;
+	bool bPlayerAtB = false;
 
-	bool bNearBtnA = false;
-	bool bNearBtnB = false;
-
+	
 	int32 MaxTime = 0;
 	int32 CurrentTime = 0;
 
 	
 	//-------------------------------------
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		void setbPlatformAtA(bool Val);
+		void setPlatformAtA(bool Val);
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		bool getbPlatformAtA();
+		bool getPlatformAtA();
 
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		void setbInsideA(bool Val);
+		void setPlayerAtA(bool Val);
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		bool getbInsideA();
+		bool getPlayerAtA();
 
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		void setbInsideB(bool Val);
+	    void setPlayerAtB(bool Val);
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		bool getbInsideB();
+	    bool getPlayerAtB();
 
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		void setbNearBtnA(bool Val);
-	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		bool getbNearBtnA();
-
-	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		void setbNearBtnB(bool Val);
-	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		bool getbNearBtnB();
-
-	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
-		bool getbIncrease();
+		bool getIsMovingAhead();
 
 	UFUNCTION(BlueprintCallable, Category = "Getters/Setters")
 		int getDirectionToMove();
@@ -79,7 +64,7 @@ protected:
 
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
-		void CalculateTime(UStaticMeshComponent* ObjectA, UStaticMeshComponent* ObjectB);
+		void CalculateTime(UPrimitiveComponent* ObjectA, UPrimitiveComponent* ObjectB);
 
 	UFUNCTION(BlueprintCallable, Category = "ClassFuncs")
 		void Switcher();
