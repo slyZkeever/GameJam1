@@ -73,6 +73,18 @@ void UGrabber::Grab()
 
 		if (Actor)
 		{
+			DefaultMat = ComponentToGrab->GetMaterial(0);
+								
+			/*
+			is the actor implements from "an interface" class
+			yes, GetOnGrabbedMaterial()
+			OnGrabMat = ComponentToGrab->GetOnGrabbedMaterial();
+			or set material's opacity to some value
+			*/
+			
+			/*DefaultMat->OverrideScalarParameterDefault(FMaterialParameterInfo("Opacity", BlendParameter, 0), 
+				0.5, true, ERHIFeatureLevel::);*/
+
 			if (!(ComponentToGrab->IsSimulatingPhysics()))
 			{
 			    ComponentToGrab->SetSimulatePhysics("true");
