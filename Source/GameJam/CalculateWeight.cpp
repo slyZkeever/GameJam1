@@ -5,6 +5,8 @@
 #include "Classes/Components/PrimitiveComponent.h"
 #include "Classes/Components/StaticMeshComponent.h"
 
+#define OUT
+
 
 // Sets default values for this component's properties
 UCalculateWeight::UCalculateWeight()
@@ -38,7 +40,7 @@ void UCalculateWeight::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 float UCalculateWeight::AddMass(UPrimitiveComponent* Collider, FName ComponentsTag)
 {
 	//get overlapping actors, set it to an array
-	Collider->GetOverlappingActors(OverlappingActorArray, TSubclassOf<AActor>());
+	Collider->GetOverlappingActors(OUT OverlappingActorArray, TSubclassOf<AActor>());
 
 	for (int32 i = 0; i != OverlappingActorArray.Num(); ++i)
 	{
@@ -65,7 +67,7 @@ float UCalculateWeight::SubtractMass(AActor* ActorEndOverlap, FName ComponentsTa
 	int RemovingActorsindex = 0;
 
 	//finding player that left from overlapping array
-	if ( OverlappingActorArray.Find(ActorEndOverlap, RemovingActorsindex) )  
+	if ( OverlappingActorArray.Find(OUT ActorEndOverlap, RemovingActorsindex) )  
 	{
 
 		//get the actor component that has the tag.
