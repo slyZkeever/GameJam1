@@ -9,6 +9,7 @@
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "GameFramework/Character.h"
 #include "Materials/MaterialInterface.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "UObject/NameTypes.h"
 #include "Templates/SubclassOf.h" 	
 #include "Engine/EngineTypes.h"
@@ -55,7 +56,8 @@ public:
 
 	void FindPhysicsHandle();
 
-	FHitResult GetFirstObjectHit();
+	//FHitResult GetFirstObjectHit();
+	void GetFirstObjectHit();
 
 	FVector GetLineTraceStart();
 	FVector GetLineTraceEnd();
@@ -85,5 +87,7 @@ private:
 	UCameraComponent* PlayerCam = nullptr;
 
 	bool ActorHit = false;
+
+	FHitResult HitResult;
 
 };
