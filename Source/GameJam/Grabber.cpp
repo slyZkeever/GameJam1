@@ -62,8 +62,9 @@ void UGrabber::FindPhysicsHandle() //find "PhysicsHandleComponent" added in BP C
 
 void UGrabber::Grab()
 {
-	FHitResult HitResult = GetFirstObjectHit();
-	
+	//FHitResult HitResult = GetFirstObjectHit();
+	GetFirstObjectHit();
+
 	if (ActorHit)
 	{
 		UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
@@ -74,16 +75,22 @@ void UGrabber::Grab()
 		if (Actor)
 		{
 			DefaultMat = ComponentToGrab->GetMaterial(0);
+			//&& KeyClass && (KeyClass != Actor->GetClass())
+			if (OnGrabMat->IsValidLowLevel() )
+			{
+				FLinearColor Color;
+				UMaterialInstanceDynamic* GrabbedMat = UMaterialInstanceDynamic::Create(OnGrabMat, this);
 								
-			/*
-			is the actor implements from "an interface" class
-			yes, GetOnGrabbedMaterial()
-			OnGrabMat = ComponentToGrab->GetOnGrabbedMaterial();
-			or set material's opacity to some value
-			*/
+				if (DefaultMat->GetVectorParameterValue(FMaterialParameterInfo("Color"), OUT Color))
+				{
+					//UE_LOG(LogTemp, Warning, TEXT("Grabbed Mesh Color: %s"), *Color.ToString());
+					
+					GrabbedMat->SetVectorParameterValue(FName("Base Color"), Color);	
+					ComponentToGrab->SetMaterial(0, GrabbedMat);
+					GrabbedMat = nullptr;
+				}			
+			}
 			
-			/*DefaultMat->OverrideScalarParameterDefault(FMaterialParameterInfo("Opacity", BlendParameter, 0), 
-				0.5, true, ERHIFeatureLevel::);*/
 
 			if (!(ComponentToGrab->IsSimulatingPhysics()))
 			{
@@ -101,13 +108,13 @@ void UGrabber::Grab()
 				ComponentToGrab->GetOwner()->GetActorRotation()
 			);
 			
-			if (KeyClass && (KeyClass != Actor->GetClass())) //the key from project has defined changes in mat in Bp_Keyhole class 
+			/*if (KeyClass && (KeyClass != Actor->GetClass())) //the key from project has defined changes in mat in Bp_Keyhole class 
 			{
 				if (OnGrabMat)
 				{
-					ComponentToGrab->SetMaterial(0, OnGrabMat);
+					
 				}
-			}
+			}*/
 			
 			UE_LOG(LogTemp, Warning, TEXT("Component Found: %s"), *(ComponentToGrab->GetName()));
 
@@ -126,14 +133,13 @@ void UGrabber::Drop()
 	
 	if (Grabbed)
 	{
-		UPrimitiveComponent* ComponentToGrab = GetFirstObjectHit().GetComponent();
+		//UPrimitiveComponent* ComponentToGrab = GetFirstObjectHit().GetComponent();
 
-		if (ComponentToGrab)
+		UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
+
+		if (ComponentToGrab && DefaultMat)
 		{
-			if (DefaultMat)
-			{
-				ComponentToGrab->SetMaterial(0, DefaultMat);
-			}
+			ComponentToGrab->SetMaterial(0, DefaultMat);
 		}
 
 		PhysicsHandle->ReleaseComponent();
@@ -147,7 +153,7 @@ void UGrabber::Drop()
 
 void UGrabber::Throw()
 {
-	FHitResult HitResult = GetFirstObjectHit();
+	//FHitResult HitResult = GetFirstObjectHit();
 	
 	if (ActorHit)
 	{
@@ -176,13 +182,13 @@ void UGrabber::Throw()
 }
 
 
-FHitResult UGrabber::GetFirstObjectHit()
+void UGrabber::GetFirstObjectHit()
 {
 	//Crete Query for Collision
 
 	FCollisionQueryParams TraceComp(FName(TEXT("")), false, GetOwner());
 
-	FHitResult HitResult;
+	//FHitResult HitResult;
 
 	ActorHit = GetWorld()->LineTraceSingleByObjectType( OUT HitResult, GetLineTraceStart(), GetLineTraceEnd(),
                   		                                FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), TraceComp
@@ -196,7 +202,7 @@ FHitResult UGrabber::GetFirstObjectHit()
 		//UE_LOG(LogTemp, Warning, TEXT("Actor Found: %s"), *(HitActor->GetName()) );
 	}
 
-	return HitResult;
+	//return HitResult;
 }
 
 FVector UGrabber::GetLineTraceStart()
