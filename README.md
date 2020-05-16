@@ -1,7 +1,7 @@
 # Details <br>
 <p>
 Engine : Unreal Engine 4.19 <br>
-Build Version : 2.1 <br>
+Build Version : 2.1.1 <br>
 <a href = "https://slyzkeever.itch.io/prototype-puzzle-platformer"> Download game </a> <br>
 </p>
 
