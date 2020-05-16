@@ -70,59 +70,66 @@ void UGrabber::Grab()
 		UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
 		AActor* Actor = HitResult.GetActor();
 
-		if (!PhysicsHandle) return; 
-
-		if (Actor)
+		if (ComponentToGrab && ComponentToGrab->ComponentHasTag(TagForMass))
 		{
-			DefaultMat = ComponentToGrab->GetMaterial(0);
-			//&& KeyClass && (KeyClass != Actor->GetClass())
-			if (OnGrabMat->IsValidLowLevel() )
+			if (ComponentToGrab->GetMass() <= PickUpLimit)
 			{
-				FLinearColor Color;
-				UMaterialInstanceDynamic* GrabbedMat = UMaterialInstanceDynamic::Create(OnGrabMat, this);
-								
-				if (DefaultMat->GetVectorParameterValue(FMaterialParameterInfo("Color"), OUT Color))
+
+				if (!PhysicsHandle) return;
+
+				if (Actor)
 				{
-					//UE_LOG(LogTemp, Warning, TEXT("Grabbed Mesh Color: %s"), *Color.ToString());
-					
-					GrabbedMat->SetVectorParameterValue(FName("Base Color"), Color);	
-					ComponentToGrab->SetMaterial(0, GrabbedMat);
-					GrabbedMat = nullptr;
-				}			
-			}
-			
+					DefaultMat = ComponentToGrab->GetMaterial(0);
+					//&& KeyClass && (KeyClass != Actor->GetClass())
+					if (OnGrabMat->IsValidLowLevel())
+					{
+						FLinearColor Color;
+						UMaterialInstanceDynamic* GrabbedMat = UMaterialInstanceDynamic::Create(OnGrabMat, this);
 
-			if (!(ComponentToGrab->IsSimulatingPhysics()))
-			{
-			    ComponentToGrab->SetSimulatePhysics("true");
-			}
+						if (DefaultMat->GetVectorParameterValue(FMaterialParameterInfo("Color"), OUT Color))
+						{
+							//UE_LOG(LogTemp, Warning, TEXT("Grabbed Mesh Color: %s"), *Color.ToString());
 
-		    //ComponentToGrab->SetMaterialByName();
-			//UE_LOG(LogTemp, Warning, TEXT("Grabbing object %s"), *(ComponentToGrab->GetName()) );
+							GrabbedMat->SetVectorParameterValue(FName("Base Color"), Color);
+							ComponentToGrab->SetMaterial(0, GrabbedMat);
+							GrabbedMat = nullptr;
+						}
+					}
 
-			PhysicsHandle->GrabComponentAtLocationWithRotation
-			(
-				ComponentToGrab,
-				NAME_None,
-				ComponentToGrab->GetOwner()->GetActorLocation(),
-				ComponentToGrab->GetOwner()->GetActorRotation()
-			);
-			
-			/*if (KeyClass && (KeyClass != Actor->GetClass())) //the key from project has defined changes in mat in Bp_Keyhole class 
-			{
-				if (OnGrabMat)
-				{
-					
+
+					if (!(ComponentToGrab->IsSimulatingPhysics()))
+					{
+						ComponentToGrab->SetSimulatePhysics("true");
+					}
+
+					//ComponentToGrab->SetMaterialByName();
+					//UE_LOG(LogTemp, Warning, TEXT("Grabbing object %s"), *(ComponentToGrab->GetName()) );
+
+					PhysicsHandle->GrabComponentAtLocationWithRotation
+					(
+						ComponentToGrab,
+						NAME_None,
+						ComponentToGrab->GetOwner()->GetActorLocation(),
+						ComponentToGrab->GetOwner()->GetActorRotation()
+					);
+
+					/*if (KeyClass && (KeyClass != Actor->GetClass())) //the key from project has defined changes in mat in Bp_Keyhole class
+					{
+					if (OnGrabMat)
+					{
+
+					}
+					}*/
+
+					UE_LOG(LogTemp, Warning, TEXT("Component Found: %s"), *(ComponentToGrab->GetName()));
+
+					Grabbed = 1;
+
+					UE_LOG(LogTemp, Warning, TEXT("Grabbed is: %d"), Grabbed);
 				}
-			}*/
-			
-			UE_LOG(LogTemp, Warning, TEXT("Component Found: %s"), *(ComponentToGrab->GetName()));
+			}
 
-			Grabbed = 1;
-
-			UE_LOG(LogTemp, Warning, TEXT("Grabbed is: %d"), Grabbed);
-		}
-				
+		}		
 	}
 
 }
