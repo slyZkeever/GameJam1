@@ -3,10 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Components/ActorComponent.h"
-
 #include "Engine/EngineTypes.h"
-
 
 #include "PlayerScript.generated.h"
 
