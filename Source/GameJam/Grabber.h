@@ -38,7 +38,13 @@ protected:
 		int32 ForceApplied = 200000;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
+		int32 PickUpLimit = 200;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		FName TagForInteraction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
+		FName TagForMass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ClassVars")
 		UMaterialInterface* DefaultMat = nullptr;
