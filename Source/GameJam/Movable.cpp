@@ -12,7 +12,7 @@ UMovable::UMovable()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -142,17 +142,21 @@ void UMovable::PerformAnimation(UStaticMeshComponent* Platform)
 	
 	FVector NewLocation = Platform->GetRelativeTransform().GetLocation();
 		
-		//wait for player input
+	//wait for player input
 
-		if (bIsMovingAhead && bPlatformAtA)  //remove bIncrease to auto move platform
-		{
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed * DirectionToMove * GetWorld()->GetDeltaSeconds()))); // move foreward
-		}
+	// move forward
+	if (bIsMovingAhead && bPlatformAtA)
+	{
+		Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed * DirectionToMove * GetWorld()->GetDeltaSeconds())));
+		//FInterpTo can be used
+	}
 
-		if (!bIsMovingAhead && !bPlatformAtA)
-		{
-			Platform->SetRelativeLocation( FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed * DirectionToMove * GetWorld()->GetDeltaSeconds() ))); //move backward
-		}
+	//move backward
+	if (!bIsMovingAhead && !bPlatformAtA)
+	{
+		Platform->SetRelativeLocation(FVector(NewLocation.X, NewLocation.Y, (NewLocation.Z + Speed * DirectionToMove * GetWorld()->GetDeltaSeconds())));
+		//FInterpTo can be used
+	}
 	
 	
 }
