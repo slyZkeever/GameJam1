@@ -76,4 +76,5 @@ DerivedDataCache/*
 # Removing actual build
 WindowsNoEditor/*
 
-
+#Temporary Files 
+Content/Temporary/*
