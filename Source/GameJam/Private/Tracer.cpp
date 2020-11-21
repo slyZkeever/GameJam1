@@ -46,8 +46,9 @@ void UTracer::TraceForInteractives()
 
 	GetWorld()->LineTraceSingleByObjectType(OUT HitResult, TraceStart, TraceEnd, 
 		                                    FCollisionObjectQueryParams(ObjectType), QueryParams);
-	if(HitResult.bBlockingHit)
+	/*if(HitResult.bBlockingHit)
 		UE_LOG(LogTemp, Warning, TEXT("HitComponent: %s"), *(HitResult.GetComponent()->GetName()))
+	*/
 
 	if (DrawDBLine)
 	{		
@@ -64,8 +65,13 @@ bool UTracer::AllowInteraction()
 	if (Grabber->GetGrabbed())
 		return false;
 
-	if (HitResult.GetComponent()->IsSimulatingPhysics() && HitResult.GetComponent()->GetMass() > Grabber->GetPickUpLimit())
-		return false;
+	//UE_LOG(LogTemp, Warning, TEXT("Object Type: %d"), HitResult.GetComponent()->GetCollisionObjectType())
+	
+	if (HitResult.GetComponent()->GetCollisionObjectType() == ECC_PhysicsBody)
+	{
+		if (HitResult.GetComponent()->GetMass() > Grabber->GetPickUpLimit())
+			return false;
+	}
 
 	// Check Actor Under Player
 	FCollisionQueryParams QueryParams(FName(TEXT("")), false, GetOwner());
